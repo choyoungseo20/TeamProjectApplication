@@ -3,8 +3,6 @@ package com.example.teamprojectapplication
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
-import androidx.navigation.NavHostController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.teamprojectapplication.databinding.ActivityMainBinding
@@ -24,13 +22,9 @@ class MainActivity : AppCompatActivity() {
 
         binding.topNav.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.action_next -> {
-                    val addDayFragment = AddDdayFragment()
-                    val fragmentManager = supportFragmentManager
-                    val transaction = fragmentManager.beginTransaction()
-                    transaction.replace(R.id.frg_nav, addDayFragment)
-                    transaction.addToBackStack(null)
-                    transaction.commit()
+                R.id.addDdayFragment -> {
+                    //binding.topNav.setupWithNavController(navController)
+                    navController.navigate(R.id.action_homeFragment_to_addDdayFragment)
                     true
                 }
                 else -> false
@@ -44,6 +38,8 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_top, menu)
         return true
     }
+
+
 
 
 }

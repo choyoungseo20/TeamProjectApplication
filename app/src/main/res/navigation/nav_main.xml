@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_postFragment"
             app:destination="@id/postFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_addDdayFragment"
+            app:destination="@id/addDdayFragment" />
     </fragment>
     <fragment
         android:id="@+id/communityFragment"
@@ -34,12 +37,19 @@
         <action
             android:id="@+id/action_addDdayFragment_to_addDiaryFragment"
             app:destination="@id/addDiaryFragment" />
+        <action
+            android:id="@+id/action_addDdayFragment_to_addDiaryFragment2"
+            app:destination="@id/addDiaryFragment" />
     </fragment>
     <fragment
         android:id="@+id/addDiaryFragment"
         android:name="com.example.teamprojectapplication.AddDiaryFragment"
         android:label="fragment_add_diary"
-        tools:layout="@layout/fragment_add_diary" />
+        tools:layout="@layout/fragment_add_diary" >
+        <action
+            android:id="@+id/action_addDiaryFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/postFragment"
         android:name="com.example.teamprojectapplication.PostFragment"

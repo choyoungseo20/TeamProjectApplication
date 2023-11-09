@@ -21,9 +21,8 @@ class HomeFragment : Fragment() {
         Dday("뒤집기 성공", "2022.12.14", "D+330", 0, 0, false),
         Dday("김공주 탄생", "2022.11.09", "D+365", 99, 64, true)
     )
-    // 뷰 바인딩을 위한 변수
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
+    var binding: FragmentHomeBinding? =null
+
 
     override fun onCreateView(
 
@@ -31,33 +30,27 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // 뷰 바인딩 초기화
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val view = binding.root
+        binding = FragmentHomeBinding.inflate(layoutInflater)
 
-        //val intent = Intent(this.context, PostFragment::class.java)
+
+        val intent = Intent(this.context, PostFragment::class.java)
 
         // RecyclerView 초기화
-        binding.recDdays.layoutManager = LinearLayoutManager(requireContext())//현재 Fragment의 컨텍스트로 LinearLayoutManager 초기화
+        //현재 Fragment의 컨텍스트로 LinearLayoutManager 초기화
+        binding?.recDdays?.layoutManager = LinearLayoutManager(requireContext())
         // 어댑터를 초기화
 
         val ddayAdapter = DdayAdapter(ddays)
-        binding.recDdays.adapter = ddayAdapter
-        /*
+        binding?.recDdays?.adapter = ddayAdapter
+
         ddayAdapter.setOnItemClickListener(object: DdayAdapter.OnItemClickListener{
             override fun onItemClick(view: View, position: Int) {
-                startActivity(intent)
+                findNavController().navigate(R.id.action_homeFragment_to_postFragment)
             }
 
-        })*/
+        })
 
-        return view
+        return binding?.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-        //val intent = Intent(this.context, PostFragment::class.java)
-
-    }
 }

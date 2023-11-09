@@ -8,15 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.teamprojectapplication.databinding.ListDdaysBinding
 
 class DdayAdapter(val ddays: Array<Dday>) :RecyclerView.Adapter<DdayAdapter.Holder>(){
-    /*클릭 리스너 역할을 하는 interface
+    //클릭 리스너 역할을 하는 interface
     interface OnItemClickListener{
         fun onItemClick(view: View, position: Int)
+
     }
     private lateinit var itemClickListener: OnItemClickListener
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener){
         itemClickListener = onItemClickListener
-    }*/
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -43,13 +44,13 @@ class DdayAdapter(val ddays: Array<Dday>) :RecyclerView.Adapter<DdayAdapter.Hold
             binding.txtLike.text = dday.like.toString()
             binding.txtComment.text = dday.comment.toString()
 
-            /*
+
             binding.root.setOnClickListener {
                 val pos = adapterPosition
                 if(pos != RecyclerView.NO_POSITION && itemClickListener != null){
                     itemClickListener.onItemClick(itemView,pos)
                 }
-            }*/
+            }
 
         }
 

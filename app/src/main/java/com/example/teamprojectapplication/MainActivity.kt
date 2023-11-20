@@ -24,7 +24,13 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.addDdayFragment -> {
                     //binding.topNav.setupWithNavController(navController)
+
+                    //if 문으로 현재 프레그먼트가 무엇이었는지 판단하기
                     navController.navigate(R.id.action_homeFragment_to_addDdayFragment)
+                    //navController.navigate(R.id.action_communityFragment_to_addDdayFragment)
+                    /*navController.navigate(R.id.action_postFragment_to_addDdayFragment)
+                    navController.navigate(R.id.action_searchFragment_to_addDdayFragment)
+                     */
                     true
                 }
                 else -> false

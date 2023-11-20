@@ -28,6 +28,10 @@
         <action
             android:id="@+id/action_communityFragment_to_postFragment"
             app:destination="@id/postFragment" />
+        <action
+            android:id="@+id/action_communityFragment_to_addDdayFragment"
+            app:destination="@id/addDdayFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/addDdayFragment"
@@ -54,10 +58,18 @@
         android:id="@+id/postFragment"
         android:name="com.example.teamprojectapplication.PostFragment"
         android:label="fragment_post"
-        tools:layout="@layout/fragment_post" />
+        tools:layout="@layout/fragment_post" >
+        <action
+            android:id="@+id/action_postFragment_to_addDdayFragment"
+            app:destination="@id/addDdayFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.teamprojectapplication.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_addDdayFragment"
+            app:destination="@id/addDdayFragment" />
+    </fragment>
 </navigation>

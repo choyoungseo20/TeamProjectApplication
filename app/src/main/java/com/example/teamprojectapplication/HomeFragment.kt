@@ -21,7 +21,8 @@ class HomeFragment : Fragment() {
         Dday("뒤집기 성공", "2022.12.14", "D+330", 0, 0, false),
         Dday("김공주 탄생", "2022.11.09", "D+365", 99, 64, true)
     )
-    var binding: FragmentHomeBinding? =null
+
+    var binding: FragmentHomeBinding? = null
 
 
     override fun onCreateView(

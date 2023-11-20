@@ -14,8 +14,6 @@ class DdayViewModel : ViewModel() {
     val ddays : LiveData<ArrayList<Dday>> = _ddays
 
     fun retrieveDdays() {
-        viewModelScope.launch {
 
-        }
     }
 }

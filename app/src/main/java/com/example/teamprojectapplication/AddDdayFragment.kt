@@ -22,6 +22,7 @@ class AddDdayFragment : Fragment() {
     ): View? {
         binding = FragmentAddDdayBinding.inflate(inflater)
 
+
         binding?.daydate?.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())

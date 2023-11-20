@@ -1,20 +1,18 @@
 package com.example.teamprojectapplication
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.teamprojectapplication.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
-    val ddays = arrayOf(
+    val exddays = arrayOf(
         Dday("돌잔치", "2023.11.09", "D-day", 0, 0, false),
         Dday("처음 말한 날", "2023.10.30", "D+10", 27, 5, true),
         Dday("처음 일어선 날", "2023.03.14", "D+240", 42, 12, true),
@@ -23,10 +21,9 @@ class HomeFragment : Fragment() {
     )
 
     var binding: FragmentHomeBinding? = null
-
+    val viewModel: DdayViewModel by viewModels()
 
     override fun onCreateView(
-
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
@@ -34,24 +31,27 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(layoutInflater)
 
 
-        val intent = Intent(this.context, PostFragment::class.java)
+        return binding?.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        //val intent = Intent(this.context, PostFragment::class.java)
 
         // RecyclerView 초기화
         //현재 Fragment의 컨텍스트로 LinearLayoutManager 초기화
         binding?.recDdays?.layoutManager = LinearLayoutManager(requireContext())
         // 어댑터를 초기화
 
-        val ddayAdapter = DdayAdapter(ddays)
-        binding?.recDdays?.adapter = ddayAdapter
+        binding?.recDdays?.adapter = DdayAdapter(viewModel.ddays)
 
-        ddayAdapter.setOnItemClickListener(object: DdayAdapter.OnItemClickListener{
+        DdayAdapter(viewModel.ddays).setOnItemClickListener(object: DdayAdapter.OnItemClickListener{
             override fun onItemClick(view: View, position: Int) {
                 findNavController().navigate(R.id.action_homeFragment_to_postFragment)
             }
 
         })
 
-        return binding?.root
     }
 
 }

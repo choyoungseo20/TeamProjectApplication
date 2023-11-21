@@ -1,4 +1,6 @@
 package com.example.teamprojectapplication
 
-class DdayRepository {
+
+class DdayRepository() {
+
 }

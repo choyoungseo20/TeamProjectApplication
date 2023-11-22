@@ -1,8 +1,11 @@
+import java.net.URI
+
 pluginManagement {
     repositories {
         google()
         mavenCentral()
         gradlePluginPortal()
+        maven {url= uri("https://oss.sonatype.org/content/repositories/snapshots/")}
     }
 }
 dependencyResolutionManagement {
@@ -15,4 +18,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "TeamProjectApplication"
 include(":app")
- 

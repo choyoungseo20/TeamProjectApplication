@@ -12,13 +12,14 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.teamprojectapplication.databinding.FragmentAddDdayBinding
+import com.example.teamprojectapplication.viewmodel.PostsViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 
 class AddDdayFragment : Fragment() {
-    val viewModel: DdayViewModel by activityViewModels()
+    val viewModel: PostsViewModel by activityViewModels()
 
     private var binding: FragmentAddDdayBinding? = null
 

@@ -6,21 +6,24 @@ import android.view.ViewGroup
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.teamprojectapplication.databinding.ListDdaysBinding
+import com.example.teamprojectapplication.viewmodel.Post
 
-class DdayAdapter(val ddays: LiveData<ArrayList<Dday>>) :RecyclerView.Adapter<DdayAdapter.Holder>(){
+class DdayListAdapter(val posts: LiveData<ArrayList<Post>>) :RecyclerView.Adapter<DdayListAdapter.Holder>(){
+    //firebase에서 가져오기 -> LiveData가 아님
+
     //클릭 리스너 역할을 하는 interface
     inner class Holder(private val binding: ListDdaysBinding ) : RecyclerView.ViewHolder(binding.root){
-        fun bind(dday: Dday?){
-            dday?.let {
-                binding.imgShow.setImageResource( when( dday.show ){
+        fun bind(post: Post?){
+            post?.let {
+                binding.imgShow.setImageResource( when( post.show ){
                     true -> R.drawable.show
                     false -> R.drawable.hide
                 })
-                binding.txtTitle.text = dday.title
-                binding.txtDate.text = dday.date
-                binding.txtDday.text = dday.dday
-                binding.txtLike.text = dday.like.toString()
-                binding.txtComment.text = dday.comment.toString()
+                binding.txtTitle.text = post.title
+                binding.txtDate.text = post.date
+                binding.txtDday.text = post.dday
+                binding.txtLike.text = post.like.toString()
+                binding.txtComment.text = post.comment.toString()
 
                 binding.root.setOnClickListener {
                     val pos = adapterPosition
@@ -51,9 +54,9 @@ class DdayAdapter(val ddays: LiveData<ArrayList<Dday>>) :RecyclerView.Adapter<Dd
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bind(ddays.value?.getOrNull(position))
+        holder.bind(posts.value?.getOrNull(position))
     }
-    override fun getItemCount(): Int = ddays.value?.size ?:0
+    override fun getItemCount(): Int = posts.value?.size ?:0
 
 
 

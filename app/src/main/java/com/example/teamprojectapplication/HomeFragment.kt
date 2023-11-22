@@ -9,19 +9,22 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.teamprojectapplication.databinding.FragmentHomeBinding
+import com.example.teamprojectapplication.viewmodel.PostsViewModel
 
 class HomeFragment : Fragment() {
 
-    val exddays = arrayOf(
-        Dday("돌잔치", "2023.11.09", "D-day", 0, 0, false),
-        Dday("처음 말한 날", "2023.10.30", "D+10", 27, 5, true),
-        Dday("처음 일어선 날", "2023.03.14", "D+240", 42, 12, true),
-        Dday("뒤집기 성공", "2022.12.14", "D+330", 0, 0, false),
-        Dday("김공주 탄생", "2022.11.09", "D+365", 99, 64, true)
+    /*val exddays = arrayOf(
+        Post("돌잔치", "2023.11.09", "D-day", 0, 0, false),
+        Post("처음 말한 날", "2023.10.30", "D+10", 27, 5, true),
+        Post("처음 일어선 날", "2023.03.14", "D+240", 42, 12, true),
+        Post("뒤집기 성공", "2022.12.14", "D+330", 0, 0, false),
+        Post("김공주 탄생", "2022.11.09", "D+365", 99, 64, true)
     )
 
+     */
+
     var binding: FragmentHomeBinding? = null
-    val viewModel: DdayViewModel by viewModels()
+    val viewModel: PostsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,9 +46,9 @@ class HomeFragment : Fragment() {
         binding?.recDdays?.layoutManager = LinearLayoutManager(requireContext())
         // 어댑터를 초기화
 
-        binding?.recDdays?.adapter = DdayAdapter(viewModel.ddays)
+        binding?.recDdays?.adapter = DdayListAdapter(viewModel.ddays)
 
-        DdayAdapter(viewModel.ddays).setOnItemClickListener(object: DdayAdapter.OnItemClickListener{
+        DdayListAdapter(viewModel.ddays).setOnItemClickListener(object: DdayListAdapter.OnItemClickListener{
             override fun onItemClick(view: View, position: Int) {
                 findNavController().navigate(R.id.action_homeFragment_to_postFragment)
             }

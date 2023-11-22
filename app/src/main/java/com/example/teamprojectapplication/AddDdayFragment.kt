@@ -54,7 +54,7 @@ class AddDdayFragment : Fragment() {
         val selectedDateStr = binding?.edtDaydate?.text.toString()
         val selectedDate = LocalDate.parse(selectedDateStr, DateTimeFormatter.ISO_DATE)
         val difference = LocalDate.now().until(selectedDate, ChronoUnit.DAYS).toInt()
-        val resOfDifference = if (difference >= 0) "+$difference" else "$difference"
+        val resOfDifference = if (difference >= 0) "D-$difference" else "D$difference"
         return resOfDifference
     }
 
@@ -67,6 +67,7 @@ class AddDdayFragment : Fragment() {
         binding?.edtDaydate?.setOnEditorActionListener{_,actionId,_ ->
             if(actionId == EditorInfo.IME_ACTION_DONE) {
                 Log.d("func","${calDifference()}") // TODO: 로그 메시지 -> MVVM
+                binding?.txtViewdday?.setText(calDifference())
                 true }else false
         }
 

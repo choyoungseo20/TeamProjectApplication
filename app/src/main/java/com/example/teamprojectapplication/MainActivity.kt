@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
             val currentDestinationId = navController.currentDestination?.id
             when (currentDestinationId) {
                 R.id.homeFragment -> {
-                    navController.navigate(R.id.action_homeFragment_to_addDdayFragment)
+                    navController.navigate(R.id.action_homeFragment_to_addDdayFragment) 
                     true
                 }
                 R.id.communityFragment -> {
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         binding.topNav.inflateMenu(R.menu.menu_top)
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menu?.clear()
+
         val navController = binding.frgNav.getFragment<NavHostFragment>().navController
         val currentDestinationId = navController.currentDestination?.id
 

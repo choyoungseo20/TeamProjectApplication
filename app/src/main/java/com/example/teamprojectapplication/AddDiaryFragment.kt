@@ -6,10 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.example.teamprojectapplication.databinding.FragmentAddDdayBinding
 import com.example.teamprojectapplication.databinding.FragmentAddDiaryBinding
+import com.example.teamprojectapplication.viewmodel.PostsViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -20,6 +22,7 @@ import java.util.Locale
  * create an instance of this fragment.
  */
 class AddDiaryFragment : Fragment() {
+    val viewModel: PostsViewModel by activityViewModels()
 
     var binding : FragmentAddDiaryBinding? = null
     override fun onCreateView(
@@ -36,16 +39,19 @@ class AddDiaryFragment : Fragment() {
 
         binding?.btnSkip?.setOnClickListener {
             findNavController().navigate(R.id.action_addDiaryFragment_to_homeFragment)
-            //번들 이용해서 앞의 Dday 데이터만 home으로 가지고 감
         }
 
         binding?.btnSave?.setOnClickListener {
-            val data = Intent()
-            data.putExtra("contents", binding?.etContents?.text.toString())
-            //번들 이용? 앞의 Dday 데이터와 일기 데이터를 가지고 home으로 감
+            viewModel.setText(binding?.etContents?.text.toString())
             findNavController().navigate(R.id.action_addDiaryFragment_to_homeFragment)
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
 
 
 }

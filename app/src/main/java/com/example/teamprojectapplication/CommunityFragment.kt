@@ -32,11 +32,9 @@ class CommunityFragment : Fragment() {
         //현재 Fragment의 컨텍스트로 LinearLayoutManager 초기화
         binding?.recPosts?.layoutManager = LinearLayoutManager(requireContext())
         // 어댑터를 초기화
+        binding?.recPosts?.adapter = DdayListAdapter(viewModel.fetchData())
 
-
-        binding?.recPosts?.adapter = DdayListAdapter(viewModel.ddays)
-
-        DdayListAdapter(viewModel.ddays).setOnItemClickListener(object: DdayListAdapter.OnItemClickListener{
+        DdayListAdapter(viewModel.fetchData()).setOnItemClickListener(object: DdayListAdapter.OnItemClickListener{
             override fun onItemClick(view: View, position: Int) {
                 findNavController().navigate(R.id.action_communityFragment_to_postFragment)
             }
@@ -47,5 +45,11 @@ class CommunityFragment : Fragment() {
         }
 
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
 
 }

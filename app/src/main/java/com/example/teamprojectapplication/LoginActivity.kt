@@ -3,14 +3,18 @@ package com.example.teamprojectapplication
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.activityViewModels
 import com.example.teamprojectapplication.databinding.ActivityLoginBinding
+import com.example.teamprojectapplication.viewmodel.PostsViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
 class LoginActivity : AppCompatActivity() {
     private var auth: FirebaseAuth? = null
     private lateinit var binding: ActivityLoginBinding
+    val viewModel: PostsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +49,7 @@ class LoginActivity : AppCompatActivity() {
             binding.txtPassword.text.toString()
         )?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                viewModel.setPost()
                 moveMainPage(task.result?.user)
             } else {
                 Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
@@ -57,4 +62,6 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
         }
     }
+
+
 }

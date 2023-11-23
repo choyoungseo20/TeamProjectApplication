@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +25,7 @@ class HomeFragment : Fragment() {
      */
 
     var binding: FragmentHomeBinding? = null
-    val viewModel: PostsViewModel by viewModels()
+    val viewModel: PostsViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,12 +44,12 @@ class HomeFragment : Fragment() {
 
         // RecyclerView 초기화
         //현재 Fragment의 컨텍스트로 LinearLayoutManager 초기화
-        binding?.recDdays?.layoutManager = LinearLayoutManager(requireContext())
+        binding?.recDdays?.layoutManager = LinearLayoutManager(context)
         // 어댑터를 초기화
 
-        binding?.recDdays?.adapter = DdayListAdapter(viewModel.ddays)
+        binding?.recDdays?.adapter = DdayListAdapter(viewModel.fetchData())
 
-        DdayListAdapter(viewModel.ddays).setOnItemClickListener(object: DdayListAdapter.OnItemClickListener{
+        DdayListAdapter(viewModel.fetchData()).setOnItemClickListener(object: DdayListAdapter.OnItemClickListener{
             override fun onItemClick(view: View, position: Int) {
                 findNavController().navigate(R.id.action_homeFragment_to_postFragment)
             }
@@ -56,5 +57,11 @@ class HomeFragment : Fragment() {
         })
 
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
 
 }

@@ -71,8 +71,13 @@ class AddDdayFragment : Fragment() {
                 true }else false
         }
 
+
         //네비게이션
         binding?.btnNext?.setOnClickListener {
+            viewModel.setTitle(binding?.edtDaytitle?.text.toString())
+            viewModel.setDate(binding?.edtDaydate?.text.toString())
+            viewModel.setDday(binding?.txtViewdday?.text.toString())
+            viewModel.setPrivate(binding?.chkPrivate?.isChecked ?: false)
             findNavController().navigate(R.id.action_addDdayFragment_to_addDiaryFragment)
         }
     }

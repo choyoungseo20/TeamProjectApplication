@@ -8,16 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.teamprojectapplication.databinding.ListDdaysBinding
 import com.example.teamprojectapplication.viewmodel.Post
 
-class DdayListAdapter(val posts: LiveData<ArrayList<Post>>) :RecyclerView.Adapter<DdayListAdapter.Holder>(){
+class DdayListAdapter(val posts: LiveData<MutableList<Post>>) :RecyclerView.Adapter<DdayListAdapter.Holder>(){
     //firebase에서 가져오기 -> LiveData가 아님
 
     //클릭 리스너 역할을 하는 interface
     inner class Holder(private val binding: ListDdaysBinding ) : RecyclerView.ViewHolder(binding.root){
         fun bind(post: Post?){
             post?.let {
-                binding.imgShow.setImageResource( when( post.show ){
-                    true -> R.drawable.show
-                    false -> R.drawable.hide
+                binding.imgShow.setImageResource( when( post.private ){
+                    true -> R.drawable.hide
+                    false -> R.drawable.show
                 })
                 binding.txtTitle.text = post.title
                 binding.txtDate.text = post.date

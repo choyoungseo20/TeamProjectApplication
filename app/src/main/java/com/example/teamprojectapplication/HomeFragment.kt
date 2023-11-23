@@ -49,12 +49,14 @@ class HomeFragment : Fragment() {
 
         binding?.recDdays?.adapter = DdayListAdapter(viewModel.fetchData())
 
-        DdayListAdapter(viewModel.fetchData()).setOnItemClickListener(object: DdayListAdapter.OnItemClickListener{
+        val adapter = DdayListAdapter(viewModel.fetchData())
+        adapter.setOnItemClickListener(object : DdayListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 findNavController().navigate(R.id.action_homeFragment_to_postFragment)
             }
-
         })
+        binding?.recDdays?.adapter = adapter
+
 
     }
 

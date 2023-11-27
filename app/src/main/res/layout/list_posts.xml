@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -10,48 +11,74 @@
         android:layout_margin="20dp"
         android:layout_gravity="center"
         app:cardCornerRadius="10dp">
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="50dp">
+
             <ImageView
                 android:id="@+id/lists_posts_profile_image"
-                android:src="@mipmap/ic_launcher"
-                android:layout_margin="7.5dp"
                 android:layout_width="35dp"
-                android:layout_height="35dp"/>
+                android:layout_height="35dp"
+                android:layout_margin="7.5dp"
+                android:src="@mipmap/ic_launcher"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
-                android:text="User name"
                 android:id="@+id/lists_posts_profile_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="User name"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/lists_posts_profile_image"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView
                 android:id="@+id/lists_posts_like_imageview"
-                android:src="@drawable/like"
-                android:layout_marginLeft="60dp"
                 android:layout_width="30dp"
-                android:layout_height="30dp"/>
+                android:layout_height="30dp"
+                android:layout_marginStart="200dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/like"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/lists_posts_likecounter"
+                app:layout_constraintStart_toEndOf="@+id/lists_posts_profile_image"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/lists_posts_likecounter"
-                android:layout_marginLeft="5dp"
-                android:text="15"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="15"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/lists_posts_comment_imageview"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/lists_posts_comment_imageview"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginLeft="7.5dp"
-                android:src="@drawable/comment" />
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/comment"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/lists_posts_commentscounter"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/lists_posts_commentscounter"
-                android:layout_marginLeft="5dp"
-                android:text="15"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="15"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
             android:id="@+id/lists_posts_imageview_content"

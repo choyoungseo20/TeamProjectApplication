@@ -34,6 +34,8 @@ class CommunityFragment : Fragment() {
         // 어댑터를 초기화
         binding?.recPosts?.adapter = PostListAdapter(viewModel.fetchData())
 
+        binding?.recPosts?.setHasFixedSize(true)
+
         DdayListAdapter(viewModel.fetchData()).setOnItemClickListener(object: DdayListAdapter.OnItemClickListener{
             override fun onItemClick(view: View, position: Int) {
                 findNavController().navigate(R.id.action_communityFragment_to_postFragment)

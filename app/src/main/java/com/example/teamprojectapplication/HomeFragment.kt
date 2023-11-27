@@ -49,6 +49,8 @@ class HomeFragment : Fragment() {
 
         binding?.recDdays?.adapter = DdayListAdapter(viewModel.fetchData())
 
+        binding?.recDdays?.setHasFixedSize(true)
+
         val adapter = DdayListAdapter(viewModel.fetchData())
         adapter.setOnItemClickListener(object : DdayListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {

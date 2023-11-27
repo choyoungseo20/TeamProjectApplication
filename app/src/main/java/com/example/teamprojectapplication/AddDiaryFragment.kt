@@ -22,20 +22,24 @@ import java.util.Locale
  * create an instance of this fragment.
  */
 class AddDiaryFragment : Fragment() {
-    val viewModel: PostsViewModel by activityViewModels()
 
     var binding : FragmentAddDiaryBinding? = null
+    val viewModel: PostsViewModel by activityViewModels()
+
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAddDiaryBinding.inflate(inflater)
-
         return binding?.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.posts.observe(viewLifecycleOwner) {
+
+        }
 
         binding?.btnSkip?.setOnClickListener {
             findNavController().navigate(R.id.action_addDiaryFragment_to_homeFragment)

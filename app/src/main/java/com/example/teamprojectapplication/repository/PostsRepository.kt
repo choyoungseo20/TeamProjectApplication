@@ -46,6 +46,10 @@ class PostsRepository() {
 
         })
     }
+
+    fun setUser() {
+        userRef.child("email").setValue(fbAuth?.currentUser?.email)
+    }
     fun findIndex() {
         //this.index =
     }
@@ -81,40 +85,14 @@ class PostsRepository() {
 
     }
 
-    fun userValue(index: String, newValue: String) {
-        index?.let { nonNullableIndex ->
-            userRef.child(nonNullableIndex).child("email").setValue(newValue)
-        } ?: run {
-            // index가 null인 경우에 대한 처리
-            Log.e("PostViewModel", "Failed to generate a key for the post.")
-        }
-
-
-    }
-
     fun exPost(newValue: Post){
         val index = userRef.push().key
         index?.let { nonNullableIndex ->
-            userRef.child(nonNullableIndex).setValue(newValue)
+            postRef.child(nonNullableIndex).setValue(newValue)
         } ?: run {
             // index가 null인 경우에 대한 처리
             Log.e("PostViewModel", "Failed to generate a key for the post.")
         }
     }
 
-    /*fun postValue(key: String, newValue: String) {
-        val index = postRef.push().key
-
-// index가 null이 아닌 경우에만 코드 실행
-        index?.let { nonNullableIndex ->
-            val post = Post("email", "writeId", "title", "text", "createAt", ArrayList(), ArrayList(), "date", "dday", 0, 0, true)
-            postRef.child(nonNullableIndex).setValue(post)
-            postRef.child(nonNullableIndex).child(key).setValue(newValue)
-        } ?: run {
-            // index가 null인 경우에 대한 처리
-            Log.e("PostViewModel", "Failed to generate a key for the post.")
-        }
-    }
-
-     */
 }

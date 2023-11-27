@@ -21,7 +21,6 @@ class CommunityFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // 뷰 바인딩 초기화
         binding = FragmentCommunityBinding.inflate(layoutInflater)
         return binding?.root
     }
@@ -33,7 +32,7 @@ class CommunityFragment : Fragment() {
 
         // 어댑터를 초기화
         viewModel.posts.observe(viewLifecycleOwner) {
-            binding?.recPosts?.adapter = PostListAdapter(viewModel.posts)
+            binding?.recPosts?.adapter?.notifyDataSetChanged()
         }
 
         val adapter = PostListAdapter(viewModel.posts)

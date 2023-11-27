@@ -34,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
             binding.txtPassword.text.toString()
         )?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                viewModel.setUser()
                 moveMainPage(task.result?.user)
             } else if (task.exception?.message.isNullOrEmpty()) {
                 Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
@@ -49,6 +50,7 @@ class LoginActivity : AppCompatActivity() {
             binding.txtPassword.text.toString()
         )?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                viewModel.setUser()
                 moveMainPage(task.result?.user)
             } else {
                 Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()

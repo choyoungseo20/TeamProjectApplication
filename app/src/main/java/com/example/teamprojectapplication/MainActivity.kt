@@ -15,8 +15,8 @@ import com.example.teamprojectapplication.viewmodel.PostsViewModel
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var binding : ActivityMainBinding
 
+    lateinit var binding : ActivityMainBinding
     val viewModel: PostsViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.topNav)
         val navController = binding.frgNav.getFragment<NavHostFragment>().navController
         binding.bottomNav.setupWithNavController(navController)
-
 
 
         binding.topNav.setOnMenuItemClickListener {
@@ -56,9 +55,9 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-
         binding.topNav.inflateMenu(R.menu.menu_top)
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         val navController = binding.frgNav.getFragment<NavHostFragment>().navController

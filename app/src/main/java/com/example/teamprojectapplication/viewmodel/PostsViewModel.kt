@@ -27,20 +27,11 @@ class PostsViewModel : ViewModel() {
     fun setPost() {
         repository.setPost()
     }
-    fun setEmail(newValue: String) {
-        repository.postValue("email", newValue)
-    }
     fun setTitle(newValue: String) {
         repository.postValue("title", newValue)
     }
     fun setText(newValue: String) {
         repository.postValue("text", newValue)
-    }
-    fun setLikeList(newValue: ArrayList<String>) {
-        repository.postValue("likeList", newValue.toString())
-    }
-    fun setImgList(newValue: ArrayList<String>) {
-        repository.postValue("imgList", newValue.toString())
     }
     fun setDate(newValue: String) {
         repository.postValue("date", newValue)

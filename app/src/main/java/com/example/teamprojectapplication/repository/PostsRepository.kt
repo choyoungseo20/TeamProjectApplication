@@ -55,7 +55,7 @@ class PostsRepository() {
     }
     fun setPost() {
         this.index = postRef.push().key
-        val post = Post("email", "title", "text", ArrayList(), ArrayList(), "date", "dday", 0, 0, true, "#FFFFFF")
+        val post = Post("email", "title", "text", "date", "dday", 0, 0, true, "#FFFFFF")
         index?.let { nonNullableIndex ->
             postRef.child(nonNullableIndex).setValue(post)
             postRef.child(nonNullableIndex).child("email").setValue(fbAuth?.currentUser?.email)

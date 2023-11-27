@@ -74,6 +74,7 @@ class AddDdayFragment : Fragment() {
 
         //네비게이션
         binding?.btnNext?.setOnClickListener {
+            viewModel.setPost()
             viewModel.setTitle(binding?.edtDaytitle?.text.toString())
             viewModel.setDate(binding?.edtDaydate?.text.toString())
             viewModel.setDday(binding?.txtViewdday?.text.toString())

@@ -3,7 +3,7 @@ package com.example.teamprojectapplication.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.teamprojectapplication.viewmodel.Post
+import com.example.teamprojectapplication.Post
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
@@ -17,6 +17,7 @@ class PostsRepository() {
     val userRef = database.getReference("user")
     val postRef = database.getReference("post")
     val fbAuth = Firebase.auth
+    var index = postRef.push().key
 
 
     fun observePost(): LiveData<MutableList<Post>> {
@@ -25,6 +26,7 @@ class PostsRepository() {
             val listData: MutableList<Post> = mutableListOf()
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
+                    listData.clear()
                     for (userSnapshot in snapshot.children){
                         val getData = userSnapshot.getValue(Post::class.java)
 
@@ -32,10 +34,8 @@ class PostsRepository() {
                             listData.add(getData)
                         } ?: run {
                             // index가 null인 경우에 대한 처리
-                            android.util.Log.e("PostRepository", "fail to get Value for the userSnapshot")
+                            Log.e("PostRepository", "fail to get Value for the userSnapshot")
                         }
-
-
                         mutableData.value = listData
                     }
                 }
@@ -48,8 +48,42 @@ class PostsRepository() {
         })
         return mutableData
     }
+    fun findIndex() {
+        //this.index =
+    }
+    fun setPost() {
+        this.index = postRef.push().key
+        val post = Post("email", "title", "text", ArrayList(), ArrayList(), "date", "dday", 0, 0, true, "#FFFFFF")
+        index?.let { nonNullableIndex ->
+            postRef.child(nonNullableIndex).setValue(post)
+            postRef.child(nonNullableIndex).child("email").setValue(fbAuth?.currentUser?.email)
+        } ?: run {
+            // index가 null인 경우에 대한 처리
+            Log.e("PostViewModel", "Failed to generate a key for the post.")
+        }
+
+    }
+
+    fun postValue(key: String, newValue: String) {
+        index?.let { nonNullableIndex ->
+            postRef.child(nonNullableIndex).child(key).setValue(newValue)
+        } ?: run {
+            // index가 null인 경우에 대한 처리
+            Log.e("PostViewModel", "Failed to generate a key for the post.")
+        }
+    }
+
+    fun private(newValue: Boolean) {
+        index?.let { nonNullableIndex ->
+            postRef.child(nonNullableIndex).child("private").setValue(newValue)
+        } ?: run {
+            // index가 null인 경우에 대한 처리
+            Log.e("PostViewModel", "Failed to generate a key for the post.")
+        }
+
+    }
+
     fun userValue(index: String, newValue: String) {
-        val index = userRef.push().key
         index?.let { nonNullableIndex ->
             userRef.child(nonNullableIndex).child("email").setValue(newValue)
         } ?: run {
@@ -60,22 +94,14 @@ class PostsRepository() {
 
     }
 
-    fun setPost() {
-        //val post = Post("email", "writeId", "title", "text", "createAt", ArrayList(), ArrayList(), "date", "dday", 0, 0, true)
-        postRef.child(fbAuth?.currentUser?.uid.toString()).setValue(Post())
-        postRef.child(fbAuth?.currentUser?.uid.toString()).child("email").setValue(fbAuth?.currentUser?.email)
-    }
-
-    fun postValue(key: String, newValue: String) {
-        postRef.child(fbAuth?.currentUser?.uid.toString()).child(key).setValue(newValue)
-    }
-
-    fun exPost(value: Post){
-        postRef.child(fbAuth?.currentUser?.uid.toString()).setValue(value)
-    }
-
-    fun private(newValue: Boolean) {
-        postRef.child(fbAuth?.currentUser?.uid.toString()).child("private").setValue(newValue)
+    fun exPost(newValue: Post){
+        val index = userRef.push().key
+        index?.let { nonNullableIndex ->
+            userRef.child(nonNullableIndex).setValue(newValue)
+        } ?: run {
+            // index가 null인 경우에 대한 처리
+            Log.e("PostViewModel", "Failed to generate a key for the post.")
+        }
     }
 
     /*fun postValue(key: String, newValue: String) {

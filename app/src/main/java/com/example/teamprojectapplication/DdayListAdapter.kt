@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.teamprojectapplication.databinding.ListDdaysBinding
-import com.example.teamprojectapplication.viewmodel.Post
 
 class DdayListAdapter(val posts: LiveData<MutableList<Post>>) :RecyclerView.Adapter<DdayListAdapter.Holder>(){
     //firebase에서 가져오기 -> LiveData가 아님

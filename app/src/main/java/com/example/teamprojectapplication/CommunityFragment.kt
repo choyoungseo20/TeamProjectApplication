@@ -36,12 +36,14 @@ class CommunityFragment : Fragment() {
 
         binding?.recPosts?.setHasFixedSize(true)
 
-        DdayListAdapter(viewModel.fetchData()).setOnItemClickListener(object: DdayListAdapter.OnItemClickListener{
+        val adapter = PostListAdapter(viewModel.fetchData())
+        adapter.setOnItemClickListener(object : PostListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 findNavController().navigate(R.id.action_communityFragment_to_postFragment)
             }
 
         })
+        binding?.recPosts?.adapter = adapter
         binding?.btnGo2?.setOnClickListener {
             findNavController().navigate(R.id.action_communityFragment_to_searchFragment)
         }

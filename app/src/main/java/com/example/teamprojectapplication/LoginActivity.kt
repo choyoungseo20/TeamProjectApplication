@@ -49,7 +49,6 @@ class LoginActivity : AppCompatActivity() {
             binding.txtPassword.text.toString()
         )?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                viewModel.setPost()
                 moveMainPage(task.result?.user)
             } else {
                 Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()

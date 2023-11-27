@@ -27,15 +27,12 @@ class CommunityFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // RecyclerView 초기화
-        //현재 Fragment의 컨텍스트로 LinearLayoutManager 초기화
 
-        // 어댑터를 초기화
-        viewModel.posts.observe(viewLifecycleOwner) {
+        viewModel.nonPrivatePosts.observe(viewLifecycleOwner) {
             binding?.recPosts?.adapter?.notifyDataSetChanged()
         }
 
-        val adapter = PostListAdapter(viewModel.posts)
+        val adapter = PostListAdapter(viewModel.nonPrivatePosts)
         adapter.setOnItemClickListener(object : PostListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 viewModel.findKey()

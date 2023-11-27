@@ -48,7 +48,7 @@ class HomeFragment : Fragment() {
         // 어댑터를 초기화
 
         viewModel.posts.observe(viewLifecycleOwner) {
-            binding?.recDdays?.adapter = DdayListAdapter(viewModel.posts)
+            binding?.recDdays?.adapter?.notifyDataSetChanged()
         }
 
 

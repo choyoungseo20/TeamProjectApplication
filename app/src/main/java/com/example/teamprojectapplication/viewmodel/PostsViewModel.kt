@@ -1,8 +1,10 @@
 package com.example.teamprojectapplication.viewmodel
 
+import android.view.animation.Transformation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import com.example.teamprojectapplication.Post
 import com.example.teamprojectapplication.repository.PostsRepository
 import com.google.android.gms.common.api.internal.ListenerHolder.ListenerKey
@@ -10,6 +12,10 @@ import com.google.android.gms.common.api.internal.ListenerHolder.ListenerKey
 class PostsViewModel : ViewModel() {
     private val _posts = MutableLiveData<MutableList<Post>>()
     val posts : LiveData<MutableList<Post>> = _posts
+
+    val nonPrivatePosts: LiveData<MutableList<Post>> = _posts.map { postList ->
+        postList.filterNot { it.private } as MutableList<Post>
+    }
 
     private val repository = PostsRepository()
     init {

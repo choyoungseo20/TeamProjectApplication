@@ -22,6 +22,9 @@ class PostsViewModel : ViewModel() {
     }
 
 
+    fun findIndex() {
+        repository.findIndex()
+    }
     fun setPost() {
         repository.setPost()
     }

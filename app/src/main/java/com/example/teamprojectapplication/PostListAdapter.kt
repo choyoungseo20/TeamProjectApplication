@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.teamprojectapplication.databinding.ListPostsBinding
 
 class PostListAdapter(val posts: LiveData<MutableList<Post>>) :RecyclerView.Adapter<PostListAdapter.Holder>(){
-    //firebase에서 가져오기 -> LiveData가 아님
+    //firebase에서 가져오기 -> LiveData가 아님 observe로
 
     //클릭 리스너 역할을 하는 interface
     inner class Holder(private val binding: ListPostsBinding) : RecyclerView.ViewHolder(binding.root){

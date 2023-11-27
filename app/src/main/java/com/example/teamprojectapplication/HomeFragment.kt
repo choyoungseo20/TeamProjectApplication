@@ -47,7 +47,10 @@ class HomeFragment : Fragment() {
         binding?.recDdays?.layoutManager = LinearLayoutManager(context)
         // 어댑터를 초기화
 
-        binding?.recDdays?.adapter = DdayListAdapter(viewModel.posts)
+        viewModel.posts.observe(viewLifecycleOwner) {
+            binding?.recDdays?.adapter = DdayListAdapter(viewModel.posts)
+        }
+
 
         binding?.recDdays?.setHasFixedSize(true)
 

@@ -30,11 +30,11 @@ class CommunityFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // RecyclerView 초기화
         //현재 Fragment의 컨텍스트로 LinearLayoutManager 초기화
-        binding?.recPosts?.layoutManager = LinearLayoutManager(requireContext())
-        // 어댑터를 초기화
-        binding?.recPosts?.adapter = PostListAdapter(viewModel.posts)
 
-        binding?.recPosts?.setHasFixedSize(true)
+        // 어댑터를 초기화
+        viewModel.posts.observe(viewLifecycleOwner) {
+            binding?.recPosts?.adapter = PostListAdapter(viewModel.posts)
+        }
 
         val adapter = PostListAdapter(viewModel.posts)
         adapter.setOnItemClickListener(object : PostListAdapter.OnItemClickListener {
@@ -45,6 +45,10 @@ class CommunityFragment : Fragment() {
 
         })
         binding?.recPosts?.adapter = adapter
+        binding?.recPosts?.layoutManager = LinearLayoutManager(context)
+        binding?.recPosts?.setHasFixedSize(true)
+
+
         binding?.btnGo2?.setOnClickListener {
             findNavController().navigate(R.id.action_communityFragment_to_searchFragment)
         }

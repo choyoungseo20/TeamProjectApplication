@@ -47,11 +47,11 @@ class HomeFragment : Fragment() {
         binding?.recDdays?.layoutManager = LinearLayoutManager(context)
         // 어댑터를 초기화
 
-        binding?.recDdays?.adapter = DdayListAdapter(viewModel.fetchData())
+        binding?.recDdays?.adapter = DdayListAdapter(viewModel.posts)
 
         binding?.recDdays?.setHasFixedSize(true)
 
-        val adapter = DdayListAdapter(viewModel.fetchData())
+        val adapter = DdayListAdapter(viewModel.posts)
         adapter.setOnItemClickListener(object : DdayListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 viewModel.findIndex()

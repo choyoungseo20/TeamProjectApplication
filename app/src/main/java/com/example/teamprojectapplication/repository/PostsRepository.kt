@@ -20,8 +20,7 @@ class PostsRepository() {
     var index = postRef.push().key
 
 
-    fun observePost(): LiveData<MutableList<Post>> {
-        val mutableData = MutableLiveData<MutableList<Post>>()
+    fun observePost(post: MutableLiveData<MutableList<Post>>) {
         postRef.addValueEventListener(object: ValueEventListener {
             val listData: MutableList<Post> = mutableListOf()
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -36,7 +35,7 @@ class PostsRepository() {
                             // index가 null인 경우에 대한 처리
                             Log.e("PostRepository", "fail to get Value for the userSnapshot")
                         }
-                        mutableData.value = listData
+                        post.value = listData
                     }
                 }
             }
@@ -46,7 +45,6 @@ class PostsRepository() {
             }
 
         })
-        return mutableData
     }
     fun findIndex() {
         //this.index =

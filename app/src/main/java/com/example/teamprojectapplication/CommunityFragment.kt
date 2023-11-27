@@ -32,11 +32,11 @@ class CommunityFragment : Fragment() {
         //현재 Fragment의 컨텍스트로 LinearLayoutManager 초기화
         binding?.recPosts?.layoutManager = LinearLayoutManager(requireContext())
         // 어댑터를 초기화
-        binding?.recPosts?.adapter = PostListAdapter(viewModel.fetchData())
+        binding?.recPosts?.adapter = PostListAdapter(viewModel.posts)
 
         binding?.recPosts?.setHasFixedSize(true)
 
-        val adapter = PostListAdapter(viewModel.fetchData())
+        val adapter = PostListAdapter(viewModel.posts)
         adapter.setOnItemClickListener(object : PostListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 viewModel.findIndex()

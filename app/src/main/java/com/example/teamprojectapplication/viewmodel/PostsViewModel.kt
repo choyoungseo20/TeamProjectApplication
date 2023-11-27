@@ -8,17 +8,12 @@ import com.example.teamprojectapplication.repository.PostsRepository
 import com.google.android.gms.common.api.internal.ListenerHolder.ListenerKey
 
 class PostsViewModel : ViewModel() {
-    private val repository = PostsRepository()
-
     private val _posts = MutableLiveData<MutableList<Post>>()
-    //val posts : LiveData<MutableList<Post>> = _posts
+    val posts : LiveData<MutableList<Post>> = _posts
 
-    fun fetchData(): LiveData<MutableList<Post>> {
-        repository.observePost().observeForever{
-            _posts.value = it
-        }
-        return _posts
-
+    private val repository = PostsRepository()
+    init {
+        repository.observePost(_posts)
     }
 
 

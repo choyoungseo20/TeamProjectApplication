@@ -38,7 +38,7 @@ class CommunityFragment : Fragment() {
         val adapter = PostListAdapter(viewModel.posts)
         adapter.setOnItemClickListener(object : PostListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-                viewModel.findIndex()
+                viewModel.findKey()
                 findNavController().navigate(R.id.action_communityFragment_to_postFragment)
             }
 

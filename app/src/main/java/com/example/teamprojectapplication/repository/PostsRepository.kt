@@ -48,9 +48,12 @@ class PostsRepository() {
     }
 
     fun setUser() {
-        userRef.child("email").setValue(fbAuth?.currentUser?.email)
+        val userId = fbAuth?.currentUser?.uid
+        userId?. let { uid ->
+            userRef.child(uid).setValue(fbAuth?.currentUser?.email)
+        }
     }
-    fun findIndex() {
+    fun findKey() {
         //this.index =
     }
     fun setPost() {
@@ -85,10 +88,12 @@ class PostsRepository() {
 
     }
 
-    fun exPost(newValue: Post){
-        val index = userRef.push().key
+    fun exPost(updatedPosts: List<Post>){
         index?.let { nonNullableIndex ->
-            postRef.child(nonNullableIndex).setValue(newValue)
+            for (newValue in updatedPosts) {
+                postRef.child(nonNullableIndex).setValue(newValue)
+            }
+
         } ?: run {
             // index가 null인 경우에 대한 처리
             Log.e("PostViewModel", "Failed to generate a key for the post.")

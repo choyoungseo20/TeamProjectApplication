@@ -57,7 +57,7 @@ class HomeFragment : Fragment() {
         val adapter = DdayListAdapter(viewModel.posts)
         adapter.setOnItemClickListener(object : DdayListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-                viewModel.findIndex()
+                viewModel.findKey()
                 findNavController().navigate(R.id.action_homeFragment_to_postFragment)
             }
         })

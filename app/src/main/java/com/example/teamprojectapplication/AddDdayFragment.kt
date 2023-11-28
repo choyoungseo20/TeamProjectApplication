@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.teamprojectapplication.databinding.FragmentAddDdayBinding
 import com.example.teamprojectapplication.viewmodel.PostsViewModel
@@ -33,51 +34,31 @@ class AddDdayFragment : Fragment() {
         return binding?.root
     }
 
-    /*private fun showColorPicker() {
-        binding?.btnColor?.setOnClickListener {
-            ColorPickerDialog
-                .Builder(requireContext())  // Fragment 내에서 실행하는 경우 requireContext()를 사용하여 컨텍스트를 참조
-                .setTitle("Pick Color")
-                .setDefaultColor(Color.parseColor("#ffffff"))  // parseColor() 메서드 대신 Color.parseColor()를 사용하여 색상을 지정
-                .setColorShape(ColorShape.CIRCLE)
-                .setColorListener { color, colorHex ->
-                    // Handle Color Selection
-                }
-                .show()
-        }
-    }
-     */
-
-    //날짜 차이 계산하기
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun calDifference(): String {
-        val selectedDateStr = binding?.edtDaydate?.text.toString()
-        val selectedDate = LocalDate.parse(selectedDateStr, DateTimeFormatter.ISO_DATE)
-        val difference = LocalDate.now().until(selectedDate, ChronoUnit.DAYS).toInt()
-        val resOfDifference = if (difference >= 0) "D-$difference" else "D$difference"
-        return resOfDifference
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("flow","onviewcreated")
 
-        //날짜 계산하기
-        binding?.edtDaydate?.setOnEditorActionListener{_,actionId,_ ->
-            if(actionId == EditorInfo.IME_ACTION_DONE) {
-                Log.d("func","${calDifference()}") // TODO: 로그 메시지 -> MVVM
-                binding?.txtViewdday?.setText(calDifference())
-                true }else false
+        binding?.edtDaytitle?.setOnClickListener{
+            viewModel.setTitle(binding?.edtDaytitle?.text.toString())
         }
 
-
-        //네비게이션
-        binding?.btnNext?.setOnClickListener {
-            viewModel.setTitle(binding?.edtDaytitle?.text.toString())
-            viewModel.setDate(binding?.edtDaydate?.text.toString())
-            viewModel.setDday(binding?.txtViewdday?.text.toString())
+        binding?.edtDaydate?.setOnEditorActionListener{_,actionId,_ ->
+            if(actionId == EditorInfo.IME_ACTION_DONE) {
+                viewModel.setDday(binding?.edtDaydate?.text.toString())
+                viewModel.posts.observe(viewLifecycleOwner){
+                    binding?.txtViewdday?.text = viewModel.getDday
+                }
+                true }else false
+        }
+        binding?.chkPrivate?.setOnClickListener {
             viewModel.setPrivate(binding?.chkPrivate?.isChecked ?: false)
+        }
+
+        binding?.btnColor?.setOnClickListener {
+            ColorPickerFragment().show(parentFragmentManager,"ColorPicker")
+        }
+        binding?.btnNext?.setOnClickListener {
+            viewModel.setPost()
             findNavController().navigate(R.id.action_addDdayFragment_to_addDiaryFragment)
         }
     }

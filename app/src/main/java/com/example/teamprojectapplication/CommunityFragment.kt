@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.teamprojectapplication.databinding.FragmentCommunityBinding
@@ -15,7 +15,7 @@ import com.example.teamprojectapplication.viewmodel.PostsViewModel
 class CommunityFragment : Fragment() {
 
     var binding: FragmentCommunityBinding? = null
-    val viewModel: PostsViewModel by viewModels()
+    val viewModel: PostsViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +34,7 @@ class CommunityFragment : Fragment() {
 
         val adapter = PostListAdapter(viewModel.nonPrivatePosts)
         adapter.setOnItemClickListener(object : PostListAdapter.OnItemClickListener {
-            override fun onItemClick(view: View, position: Int) {
+            override fun onItemClick(view: View, position: Int, key: String) {
                 findNavController().navigate(R.id.action_communityFragment_to_postFragment)
             }
 

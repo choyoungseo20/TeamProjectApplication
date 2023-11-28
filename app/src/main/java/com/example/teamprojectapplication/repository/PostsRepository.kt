@@ -17,7 +17,7 @@ class PostsRepository() {
     val userRef = database.getReference("user")
     val postRef = database.getReference("post")
     val fbAuth = Firebase.auth
-    var index = postRef.push().key
+    var index: String? = null
 
 
     fun observePost(post: MutableLiveData<MutableList<Post>>) {
@@ -29,7 +29,7 @@ class PostsRepository() {
                     for (userSnapshot in snapshot.children){
                         val getData = userSnapshot.getValue(Post::class.java)
 
-                        getData?. let {
+                        getData?.let {
                             listData.add(getData)
                         } ?: run {
                             // index가 null인 경우에 대한 처리
@@ -49,7 +49,7 @@ class PostsRepository() {
 
     fun setUser() {
         val userId = fbAuth?.currentUser?.uid
-        userId?. let { uid ->
+        userId?.let { uid ->
             userRef.child(uid).setValue(fbAuth?.currentUser?.email)
         }
     }
@@ -58,10 +58,11 @@ class PostsRepository() {
     }
     fun setPost() {
         this.index = postRef.push().key
-        val post = Post("email", "title", "text", "date", "D-day", 0, 0, true, "#FFFFFF")
+        val post = Post("email", "title", "text", "date", "dday", 0, HashMap(),0, true, "#FFFFFF","key")
         index?.let { nonNullableIndex ->
             postRef.child(nonNullableIndex).setValue(post)
             postRef.child(nonNullableIndex).child("email").setValue(fbAuth?.currentUser?.email)
+            postRef.child(nonNullableIndex).child("key").setValue(nonNullableIndex)
         } ?: run {
             // index가 null인 경우에 대한 처리
             Log.e("PostViewModel", "Failed to generate a key for the post.")

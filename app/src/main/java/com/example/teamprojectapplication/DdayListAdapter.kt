@@ -21,8 +21,8 @@ class DdayListAdapter(val posts: LiveData<MutableList<Post>>) :RecyclerView.Adap
                 binding.txtTitle.text = post.title
                 binding.txtDate.text = post.date
                 binding.txtDday.text = post.dday
-                binding.txtLike.text = post.like.toString()
-                binding.txtComment.text = post.comment.toString()
+                binding.txtLike.text = post.likeCount.toString()
+                binding.txtComment.text = post.commentCount.toString()
 
                 binding.root.setOnClickListener {
                     val pos = adapterPosition

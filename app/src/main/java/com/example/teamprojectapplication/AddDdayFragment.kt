@@ -58,7 +58,6 @@ class AddDdayFragment : Fragment() {
             ColorPickerFragment().show(parentFragmentManager,"ColorPicker")
         }
         binding?.btnNext?.setOnClickListener {
-            viewModel.setPost()
             findNavController().navigate(R.id.action_addDdayFragment_to_addDiaryFragment)
         }
     }

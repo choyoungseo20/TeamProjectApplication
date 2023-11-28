@@ -15,14 +15,16 @@ class PostListAdapter(val posts: LiveData<MutableList<Post>>) :RecyclerView.Adap
                 binding.listsPostsExplainTextview.text = it.text
                 //binding.listsPostsCommentImageview = post.imgList
                 binding.listsPostsProfileTextview.text = it.email
-                binding.listsPostsLikecounter.text = it.like.toString()
-                binding.listsPostsCommentscounter.text = it.comment.toString()
+                binding.listsPostsLikecounter.text = it.likeCount.toString()
+                binding.listsPostsCommentscounter.text = it.commentCount.toString()
+                val key = it.key
 
                 binding.root.setOnClickListener {
                     val pos = adapterPosition
-                    if(pos != RecyclerView.NO_POSITION && itemClickListener != null){
-                        itemClickListener.onItemClick(itemView,pos)
+                    if( pos != RecyclerView.NO_POSITION && itemClickListener != null ) {
+                        itemClickListener.onItemClick(itemView, pos, key)
                     }
+
                 }
             }
 
@@ -30,7 +32,7 @@ class PostListAdapter(val posts: LiveData<MutableList<Post>>) :RecyclerView.Adap
 
     }
     interface OnItemClickListener{
-        fun onItemClick(view: View, position: Int) {
+        fun onItemClick(view: View, position: Int, key: String) {
 
         }
     }

@@ -23,11 +23,12 @@ class DdayListAdapter(val posts: LiveData<MutableList<Post>>) :RecyclerView.Adap
                 binding.txtDday.text = post.dday
                 binding.txtLike.text = post.likeCount.toString()
                 binding.txtComment.text = post.commentCount.toString()
+                val key = post.key
 
                 binding.root.setOnClickListener {
                     val pos = adapterPosition
                     if(pos != RecyclerView.NO_POSITION && itemClickListener != null){
-                        itemClickListener.onItemClick(itemView,pos)
+                        itemClickListener.onItemClick(itemView,pos, key )
                     }
                 }
             }
@@ -36,7 +37,7 @@ class DdayListAdapter(val posts: LiveData<MutableList<Post>>) :RecyclerView.Adap
 
     }
     interface OnItemClickListener{
-        fun onItemClick(view: View, position: Int)
+        fun onItemClick(view: View, position: Int, key: String)
 
     }
     private lateinit var itemClickListener: OnItemClickListener

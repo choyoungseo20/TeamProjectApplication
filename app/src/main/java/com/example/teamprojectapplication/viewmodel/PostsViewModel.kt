@@ -15,6 +15,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.example.teamprojectapplication.Post
 import com.example.teamprojectapplication.repository.PostsRepository
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.time.format.DateTimeParseException
 
 class PostsViewModel : ViewModel() {
@@ -106,6 +110,41 @@ class PostsViewModel : ViewModel() {
     }
     fun setPost() {
         repository.setPost(post.value)
+    }
+
+    fun bringEmail(key: String, callback: (String?)-> Unit) : String {
+        val email : String
+        email = repository.bringEmail(key, callback).toString()
+        return email
+    }
+
+    fun bringText(key: String, callback: (String?)-> Unit) : String {
+        val text : String
+        text = repository.bringText(key, callback).toString()
+        return text
+    }
+
+    fun getPostDataByKey(key: String): LiveData<Post> {
+
+        val postData = MutableLiveData<Post>()
+
+        val databaseReference = FirebaseDatabase.getInstance().reference.child("post").child(key)
+
+        if(databaseReference != null ) {
+            databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val post = dataSnapshot.getValue(Post::class.java)
+                    postData.value = post!!
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
+
+        }
+
+        return postData
     }
 
     /*fun findKey(postKey: String) {

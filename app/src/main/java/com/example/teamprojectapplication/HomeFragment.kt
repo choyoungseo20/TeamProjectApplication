@@ -14,7 +14,8 @@ import com.example.teamprojectapplication.viewmodel.PostsViewModel
 
 class HomeFragment : Fragment() {
 
-    /*val exddays = arrayOf(
+    /* 퍼블리싱용 데이터셋
+    val exddays = arrayOf(
         Post("돌잔치", "2023.11.09", "D-day", 0, 0, false),
         Post("처음 말한 날", "2023.10.30", "D+10", 27, 5, true),
         Post("처음 일어선 날", "2023.03.14", "D+240", 42, 12, true),
@@ -56,7 +57,8 @@ class HomeFragment : Fragment() {
 
         val adapter = DdayListAdapter(viewModel.posts)
         adapter.setOnItemClickListener(object : DdayListAdapter.OnItemClickListener {
-            override fun onItemClick(view: View, position: Int) {
+            override fun onItemClick(view: View, position: Int, key: String) {
+                viewModel.bringKey(key)
                 findNavController().navigate(R.id.action_homeFragment_to_postFragment)
             }
         })

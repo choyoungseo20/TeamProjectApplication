@@ -6,24 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".SearchFragment">
 
-    <LinearLayout
+    <EditText
+        android:id="@+id/editTextText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginTop="64dp"
+        android:autofillHints="name"
+        android:ems="10"
+        android:hint="Search:"
+        android:inputType="text"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="VisualLintTextFieldSize" />
 
-        <EditText
-            android:id="@+id/editTextText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:text="search : " />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rec_search_posts"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

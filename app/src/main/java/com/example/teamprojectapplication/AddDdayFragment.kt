@@ -38,37 +38,21 @@ class AddDdayFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d("flow","onviewcreated")
 
-        /*
-        binding?.edtDaytitle?.setOnClickListener{
-            viewModel.setTitle(binding?.edtDaytitle?.text.toString())
-        }
-
-
         binding?.edtDaydate?.setOnEditorActionListener{_,actionId,_ ->
             if(actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.setDday(binding?.edtDaydate?.text.toString())
-                viewModel.posts.observe(viewLifecycleOwner){
-                    binding?.txtViewdday?.text = viewModel.getDday
-                }
-                true }else false
+                binding?.txtViewdday?.text = viewModel.calDiffernce(binding?.edtDaydate?.text.toString())
+                true}else false
         }
-
-
-        binding?.chkPrivate?.setOnClickListener {
-            viewModel.setPrivate(binding?.chkPrivate?.isChecked ?: false)
-        }
-
-         */
 
         binding?.btnColor?.setOnClickListener {
             ColorPickerFragment().show(parentFragmentManager,"ColorPicker")
         }
 
 
-        binding?.btnNext?.setOnClickListener {
+        binding?.btnNext?.setOnClickListener{
+            viewModel.setDday(binding?.edtDaydate?.text.toString())
             viewModel.setTitle(binding?.edtDaytitle?.text.toString())
             viewModel.setDate(binding?.edtDaydate?.text.toString())
-            viewModel.setDday(binding?.txtViewdday?.text.toString())
             viewModel.setPrivate(binding?.chkPrivate?.isChecked ?: false)
             findNavController().navigate(R.id.action_addDdayFragment_to_addDiaryFragment)
         }

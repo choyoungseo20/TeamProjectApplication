@@ -30,13 +30,6 @@ class ColorPickerFragment : DialogFragment() {
         return binding?.root
     }
 
-    private fun rgbToHex(red: Int, green: Int, blue: Int): String {
-        val hexRed = red.toString(16).padStart(2, '0')
-        val hexGreen = green.toString(16).padStart(2, '0')
-        val hexBlue = blue.toString(16).padStart(2, '0')
-        return "#$hexRed$hexGreen$hexBlue"
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.d("flow", "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
@@ -45,16 +38,14 @@ class ColorPickerFragment : DialogFragment() {
         colorPickerView?.setColorListener(object : ColorEnvelopeListener {
             override fun onColorSelected(envelope: ColorEnvelope?, fromUser: Boolean) {
                 val selectedColor = envelope?.color
-
-                if (selectedColor != null) {
-                    val hexCode = rgbToHex(selectedColor.red, selectedColor.green, selectedColor.blue)
-                    viewModel.setColor(hexCode)
-                }
+                selectedColor?.let {viewModel.setColor(selectedColor)}
             }
         })
 
+        binding?.btnColorsave?.setOnClickListener {
+            dismissAllowingStateLoss()
+        }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

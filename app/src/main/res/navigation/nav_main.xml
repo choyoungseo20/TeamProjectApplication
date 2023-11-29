@@ -71,5 +71,8 @@
         <action
             android:id="@+id/action_searchFragment_to_addDdayFragment"
             app:destination="@id/addDdayFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_communityFragment"
+            app:destination="@id/communityFragment" />
     </fragment>
 </navigation>

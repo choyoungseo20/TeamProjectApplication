@@ -35,22 +35,31 @@ class PostsViewModel : ViewModel() {
     val post: LiveData<Post>
         get() = _post
 
+    var key: String? = null
+
+    fun bringKey(postKey: String) {
+        key = postKey
+    }
+
+    fun retriveKey(): String? {
+        return key
+    }
 
     fun setUser() {
         repository.setUser()
     }
 
-    fun setTitle(title: String){
+    fun setTitle(title: String) {
         _post.value = _post.value?.copy(
             title = title
         )
     }
-    fun setText(text: String){
+    fun setText(text: String) {
         _post.value = _post.value?.copy(
             text = text
         )
     }
-    fun setDate(date: String){
+    fun setDate(date: String) {
         _post.value = _post.value?.copy(
             date = date
         )
@@ -70,14 +79,13 @@ class PostsViewModel : ViewModel() {
         }
 
     }
-
-    fun setDday(dday: String){
+    fun setDday(dday: String) {
         val ddayData = calDiffernce(dday)
         _post.value = _post.value?.copy(
             dday = ddayData
         )
     }
-    fun setPrivate(private: Boolean){
+    fun setPrivate(private: Boolean) {
         _post.value = _post.value?.copy(
             private = private
         )
@@ -95,9 +103,8 @@ class PostsViewModel : ViewModel() {
         _post.value = _post.value?.copy(
             color = colorData
         )
-
     }
-    fun setPost(){
+    fun setPost() {
         repository.setPost(post.value)
     }
 

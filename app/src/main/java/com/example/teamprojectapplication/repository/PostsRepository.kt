@@ -73,6 +73,9 @@ class PostsRepository() {
             Log.e("PostViewModel", "Failed to generate a key for the post.")
         }
     }
+    fun addElem(postKey: String, child: String, newValue: String) {
+        postRef.child(postKey).child(child).setValue(newValue)
+    }
 
     /*
     fun findKey() {

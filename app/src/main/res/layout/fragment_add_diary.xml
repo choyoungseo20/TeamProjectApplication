@@ -7,10 +7,33 @@
     android:layout_height="match_parent"
     tools:context=".AddDiaryFragment">
 
-    <EditText
-        android:id="@+id/et_contents"
+    <ImageView
+        android:id="@+id/img_area"
+        android:layout_width="341dp"
+        android:layout_height="200dp"
+        android:layout_margin="7.5dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_upload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_upload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#4CAF50"
+        android:text="이미지 등록"
+        app:layout_constraintBottom_toTopOf="@+id/edt_contents"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/edt_contents"
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:layout_marginBottom="10dp"
         android:ems="17"
         android:gravity="top|left"
         android:hint="내용 :"
@@ -18,8 +41,8 @@
         android:lines="15"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -29,19 +52,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_contents">
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/btn_skip"
-            android:layout_width="200dp"
+            android:layout_width="197dp"
             android:layout_height="wrap_content"
             android:backgroundTint="#4CAF50"
             android:text="건너뛰기" />
 
         <Button
             android:id="@+id/btn_save"
-            android:layout_width="200dp"
+            android:layout_width="197dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:backgroundTint="#4CAF50"

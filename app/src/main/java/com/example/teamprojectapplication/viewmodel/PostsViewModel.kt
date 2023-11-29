@@ -17,13 +17,14 @@ import java.time.temporal.ChronoUnit
 
 class PostsViewModel : ViewModel() {
     private val _posts = MutableLiveData<MutableList<Post>>()
-    val posts : LiveData<MutableList<Post>> = _posts
+    val posts : LiveData<MutableList<Post>> get() = _posts
 
     val nonPrivatePosts: LiveData<MutableList<Post>> = _posts.map { postList ->
         postList.filterNot { it.private }.toMutableList().apply {
             reverse()
         }
     }
+
 
     private val repository = PostsRepository()
     init {
@@ -103,10 +104,12 @@ class PostsViewModel : ViewModel() {
      */
 
 
+    //val key get() = _posts.value?
 
 
-    fun findKey() {
-        repository.findKey()
+
+    fun findKey(postKey: String) {
+
     }
     fun setUser() {
         repository.setUser()
@@ -125,7 +128,7 @@ class PostsViewModel : ViewModel() {
     }
     fun setDday(newValue: String) {
         //date
-        repository.postValue("date", newValue)
+        setDate(newValue)
         //dday
         try {
             val selectedDate = LocalDate.parse(newValue, DateTimeFormatter.ISO_DATE)
@@ -152,6 +155,6 @@ class PostsViewModel : ViewModel() {
         repository.private(newValue)
     }
     fun setColor(newValue: String) {
-        repository.postValue("color", newValue.toString())
+        repository.postValue("color", newValue)
     }
 }

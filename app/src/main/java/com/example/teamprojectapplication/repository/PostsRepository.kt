@@ -1,6 +1,8 @@
 package com.example.teamprojectapplication.repository
 
+import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.teamprojectapplication.Post
@@ -10,18 +12,28 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import com.google.firebase.storage.storage
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 class PostsRepository() {
-    val database = Firebase.database
-    val userRef = database.getReference("user")
-    val postRef = database.getReference("post")
-    val fbAuth = Firebase.auth
+    val database get() = Firebase.database
+    val userRef get() = database.getReference("user")
+    val postRef get() = database.getReference("post")
+    val fbAuth get() = Firebase.auth
     var index: String? = null
 
 
+    val storage get() = Firebase.storage
+    val storageRef get() = storage.getReference("image")
+    val fileName get() = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
+    val mountainsRef get() = storageRef.child("${fileName}.png")
+
+
+
     fun observePost(post: MutableLiveData<MutableList<Post>>) {
-        postRef.addValueEventListener(object: ValueEventListener {
+        postRef.addValueEventListener(object: ValueEventListener { //콜백함수
             val listData: MutableList<Post> = mutableListOf()
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
@@ -58,7 +70,7 @@ class PostsRepository() {
     }
     fun setPost() {
         this.index = postRef.push().key
-        val post = Post("email", "title", "text", "date", "dday", 0, HashMap(),0, true, "#FFFFFF","key")
+        val post = Post("email", "title", "text", "date", "dday", "imageUrl", 0, HashMap(),0, false, "#FFFFFF","key")
         index?.let { nonNullableIndex ->
             postRef.child(nonNullableIndex).setValue(post)
             postRef.child(nonNullableIndex).child("email").setValue(fbAuth?.currentUser?.email)

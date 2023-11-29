@@ -35,6 +35,7 @@ class CommunityFragment : Fragment() {
         val adapter = PostListAdapter(viewModel.nonPrivatePosts)
         adapter.setOnItemClickListener(object : PostListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int, key: String) {
+                viewModel.findKey(key)
                 findNavController().navigate(R.id.action_communityFragment_to_postFragment)
             }
 
@@ -44,7 +45,7 @@ class CommunityFragment : Fragment() {
         binding?.recPosts?.setHasFixedSize(true)
 
 
-        binding?.btnGo2?.setOnClickListener {
+        binding?.edtSearch?.setOnClickListener {
             findNavController().navigate(R.id.action_communityFragment_to_searchFragment)
         }
 

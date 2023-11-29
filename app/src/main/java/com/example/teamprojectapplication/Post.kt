@@ -6,6 +6,7 @@ data class Post(
     val text: String = "",
     val date: String = "",
     val dday: String = "",
+    val imageUrl: String = "",
     val likeCount: Int = 0,
     val likes: MutableMap<String, Boolean> = HashMap(),
     val commentCount: Int = 0,

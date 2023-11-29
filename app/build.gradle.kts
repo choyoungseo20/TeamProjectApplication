@@ -52,11 +52,12 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.5")
     implementation("com.google.firebase:firebase-database:20.3.0")
-
     implementation("com.google.firebase:firebase-auth:22.3.0")
     implementation("com.google.firebase:firebase-bom:32.6.0")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
     implementation("com.google.firebase:firebase-common-ktx:20.4.2")
+    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
     implementation("com.github.skydoves:colorpickerview:2.3.0")
 
     testImplementation("junit:junit:4.13.2")

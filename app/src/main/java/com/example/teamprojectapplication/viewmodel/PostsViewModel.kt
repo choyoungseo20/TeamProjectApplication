@@ -1,19 +1,11 @@
 package com.example.teamprojectapplication.viewmodel
 
-import android.os.Build
-import android.view.animation.Transformation
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
 import com.example.teamprojectapplication.Post
 import com.example.teamprojectapplication.repository.PostsRepository
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
-import java.time.temporal.ChronoUnit
 
 class PostsViewModel : ViewModel() {
     private val _posts = MutableLiveData<MutableList<Post>>()
@@ -24,91 +16,55 @@ class PostsViewModel : ViewModel() {
             reverse()
         }
     }
-
-
     private val repository = PostsRepository()
     init {
         repository.observePost(_posts)
     }
 
-    /*
-    private fun uploadPost(elem: String, newValue: String) {
+    private val _post = MutableLiveData(Post())
+    val post: LiveData<Post>
+        get() = _post
 
-        val currentPosts = _posts.value?: mutableListOf()
-        val updatedPosts = currentPosts.map { post ->
-            if ( elem == "title" ) {
-                post.copy(title = newValue)
-            }
-            else if ( elem == "text" ) {
-                post.copy(text = newValue)
-            }
-            else if ( elem == "date" ) {
-                post.copy(date = newValue)
-            }
-            else if ( elem == "dday" ) {
-                post.copy(dday = newValue)
-            }
-            else if ( elem == "like" ) {
-                post.copy(like = newValue.toInt())
-            }
-            else if ( elem == "dday" ) {
-                post.copy(comment = newValue.toInt())
-            }
-            else if ( elem == "private" ) {
-                post.copy(private = newValue.toBoolean())
-            }
-            else if ( elem == "color" ) {
-                post.copy(color = newValue)
-            }
-            else {
-                post
-            }
-        }
-        repository.exPost(updatedPosts)
-    }
 
-    fun findIndex() {
-        repository.findIndex()
-    }
     fun setUser() {
         repository.setUser()
     }
-    fun setPost() {
-        repository.setPost()
+
+    fun setTitle(title: String){
+        _post.value = _post.value?.copy(
+            title = title
+        )
     }
-    fun setTitle(newValue: String) {
-        uploadPost("title", newValue)
+    fun setText(text: String){
+        _post.value = _post.value?.copy(
+            text = text
+        )
     }
-    fun setText(newValue: String) {
-        uploadPost("text", newValue)
+    fun setDate(date: String){
+        _post.value = _post.value?.copy(
+            date = date
+        )
     }
-    fun setDate(newValue: String) {
-        uploadPost("date", newValue)
+    fun setDday(dday: String){
+        _post.value = _post.value?.copy(
+            dday = dday
+        )
     }
-    fun setDday(newValue: String) {
-        uploadPost("dday", newValue)
+    fun setPrivate(private: Boolean){
+        _post.value = _post.value?.copy(
+            private = private
+        )
     }
-    fun setLike(newValue: String) {
-        uploadPost("like", newValue)
+    fun setColor(color: String){
+        _post.value = _post.value?.copy(
+            color = color
+        )
     }
-    fun setComment(newValue: String) {
-        uploadPost("comment", newValue)
-    }
-    fun setPrivate(newValue: Boolean) {
-        uploadPost("private", newValue.toString())
-    }
-    fun setColor(newValue: String) {
-        uploadPost("color", newValue)
+    fun setPost(){
+        repository.setPost(post.value)
     }
 
-     */
-
-
-    //val key get() = _posts.value?
-
-
-
-    fun findKey(postKey: String) {
+    /*fun findKey(postKey: String) {
 
     }
     fun setUser() {
@@ -157,4 +113,6 @@ class PostsViewModel : ViewModel() {
     fun setColor(newValue: String) {
         repository.postValue("color", newValue)
     }
+
+     */
 }

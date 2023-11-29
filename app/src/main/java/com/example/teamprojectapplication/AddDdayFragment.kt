@@ -38,9 +38,11 @@ class AddDdayFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d("flow","onviewcreated")
 
+        /*
         binding?.edtDaytitle?.setOnClickListener{
             viewModel.setTitle(binding?.edtDaytitle?.text.toString())
         }
+
 
         binding?.edtDaydate?.setOnEditorActionListener{_,actionId,_ ->
             if(actionId == EditorInfo.IME_ACTION_DONE) {
@@ -50,14 +52,24 @@ class AddDdayFragment : Fragment() {
                 }
                 true }else false
         }
+
+
         binding?.chkPrivate?.setOnClickListener {
             viewModel.setPrivate(binding?.chkPrivate?.isChecked ?: false)
         }
 
+         */
+
         binding?.btnColor?.setOnClickListener {
             ColorPickerFragment().show(parentFragmentManager,"ColorPicker")
         }
+
+
         binding?.btnNext?.setOnClickListener {
+            viewModel.setTitle(binding?.edtDaytitle?.text.toString())
+            viewModel.setDate(binding?.edtDaydate?.text.toString())
+            viewModel.setDday(binding?.txtViewdday?.text.toString())
+            viewModel.setPrivate(binding?.chkPrivate?.isChecked ?: false)
             findNavController().navigate(R.id.action_addDdayFragment_to_addDiaryFragment)
         }
     }

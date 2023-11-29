@@ -46,11 +46,13 @@ class AddDiaryFragment : Fragment() {
         }
 
         binding?.btnSkip?.setOnClickListener {
+            viewModel.setPost()
             findNavController().navigate(R.id.action_addDiaryFragment_to_homeFragment)
         }
 
         binding?.btnSave?.setOnClickListener {
             viewModel.setText(binding?.edtContents?.text.toString())
+            viewModel.setPost()
             findNavController().navigate(R.id.action_addDiaryFragment_to_homeFragment)
         }
     }

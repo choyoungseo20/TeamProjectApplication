@@ -17,7 +17,6 @@ import com.example.teamprojectapplication.viewmodel.PostsViewModel
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityMainBinding
-    val viewModel: PostsViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,22 +32,18 @@ class MainActivity : AppCompatActivity() {
             val currentDestinationId = navController.currentDestination?.id
             when (currentDestinationId) {
                 R.id.homeFragment -> {
-                    viewModel.setPost()
                     navController.navigate(R.id.action_homeFragment_to_addDdayFragment) 
                     true
                 }
                 R.id.communityFragment -> {
-                    viewModel.setPost()
                     navController.navigate(R.id.action_communityFragment_to_addDdayFragment)
                     true
                 }
                 R.id.postFragment -> {
-                    viewModel.setPost()
                     navController.navigate(R.id.action_postFragment_to_addDdayFragment)
                     true
                 }
                 R.id.searchFragment -> {
-                    viewModel.setPost()
                     navController.navigate(R.id.action_searchFragment_to_addDdayFragment)
                     true
                 }

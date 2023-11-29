@@ -1,9 +1,6 @@
 package com.example.teamprojectapplication.repository
 
-import android.net.Uri
 import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.teamprojectapplication.Post
 import com.google.firebase.Firebase
@@ -22,7 +19,7 @@ class PostsRepository() {
     val userRef get() = database.getReference("user")
     val postRef get() = database.getReference("post")
     val fbAuth get() = Firebase.auth
-    var index: String? = null
+    //var index: String? = null
 
 
     val storage get() = Firebase.storage
@@ -65,6 +62,19 @@ class PostsRepository() {
             userRef.child(uid).setValue(fbAuth?.currentUser?.email)
         }
     }
+    fun setPost(post: Post?){
+        val postKey = postRef.push().key
+        postKey?.let { nonNullableIndex ->
+            val updatedPost = post?.copy(key = nonNullableIndex)
+            postRef.child(nonNullableIndex).setValue(updatedPost)
+            postRef.child(nonNullableIndex).child("email").setValue(fbAuth?.currentUser?.email)
+        } ?: run {
+            // postKey가 null인 경우에 대한 처리
+            Log.e("PostViewModel", "Failed to generate a key for the post.")
+        }
+    }
+
+    /*
     fun findKey() {
         //this.index =
     }
@@ -101,16 +111,8 @@ class PostsRepository() {
 
     }
 
-    fun exPost(updatedPosts: List<Post>){
-        index?.let { nonNullableIndex ->
-            for (newValue in updatedPosts) {
-                postRef.child(nonNullableIndex).setValue(newValue)
-            }
+     */
 
-        } ?: run {
-            // index가 null인 경우에 대한 처리
-            Log.e("PostViewModel", "Failed to generate a key for the post.")
-        }
-    }
+
 
 }

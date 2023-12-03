@@ -13,4 +13,12 @@ data class Post(
     val private: Boolean = false,
     val color: String = "",
     val key: String =""
-)
+) {
+    data class Comment(
+        val uid: String = "",
+        val userId: String = "",
+        val content: String = "",
+        val timeStamp: Long? = null
+
+    )
+}

@@ -14,17 +14,6 @@ import com.example.teamprojectapplication.viewmodel.PostsViewModel
 
 class HomeFragment : Fragment() {
 
-    /* 퍼블리싱용 데이터셋
-    val exddays = arrayOf(
-        Post("돌잔치", "2023.11.09", "D-day", 0, 0, false),
-        Post("처음 말한 날", "2023.10.30", "D+10", 27, 5, true),
-        Post("처음 일어선 날", "2023.03.14", "D+240", 42, 12, true),
-        Post("뒤집기 성공", "2022.12.14", "D+330", 0, 0, false),
-        Post("김공주 탄생", "2022.11.09", "D+365", 99, 64, true)
-    )
-
-     */
-
     var binding: FragmentHomeBinding? = null
     val viewModel: PostsViewModel by activityViewModels()
 
@@ -48,14 +37,14 @@ class HomeFragment : Fragment() {
         binding?.recDdays?.layoutManager = LinearLayoutManager(context)
         // 어댑터를 초기화
 
-        viewModel.posts.observe(viewLifecycleOwner) {
+        viewModel.myPosts.observe(viewLifecycleOwner) {
             binding?.recDdays?.adapter?.notifyDataSetChanged()
         }
 
 
         binding?.recDdays?.setHasFixedSize(true)
 
-        val adapter = DdayListAdapter(viewModel.posts)
+        val adapter = DdayListAdapter(viewModel.myPosts)
         adapter.setOnItemClickListener(object : DdayListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int, key: String) {
                 viewModel.bringKey(key)

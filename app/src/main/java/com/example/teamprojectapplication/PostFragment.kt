@@ -12,6 +12,7 @@ import com.example.teamprojectapplication.databinding.FragmentHomeBinding
 import com.example.teamprojectapplication.databinding.FragmentPostBinding
 import com.example.teamprojectapplication.viewmodel.PostsViewModel
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.Transaction
@@ -25,23 +26,7 @@ class PostFragment : Fragment() {
     val viewModel: PostsViewModel by activityViewModels()
 
 
-    /*fun likeEvent() {
-        val key = viewModel.retriveKey()
-        val database = Firebase.database
-        val postRef = database.getReference("post")
-        val contentUid = contentUidList[position]
-        val currentEmail = Firebase.auth?.currentUser?.email
 
-        postRef.child(contentUid).addListenerForSingleValueEvent(object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val contentDTO = dataSnapshot.getValue
-            }
-        })
-
-
-
-    }
-    */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -70,23 +55,21 @@ class PostFragment : Fragment() {
                 viewModel.bringText(key){ text ->
                     binding?.fragmentPostsExplainTextview?.text = text
                 }
+                viewModel.observeLikeStatus(key).observe(viewLifecycleOwner) { isLiked ->
+                    val likeImageResource = if (isLiked) R.drawable.like else R.drawable.like_border
+                    binding?.fragmentPostsLikeImageview?.setImageResource(likeImageResource)
+                }
+                binding?.fragmentPostsLikeImageview?.setOnClickListener {
+                    viewModel.likePost(key)
+                }
+                viewModel.posts.observe(viewLifecycleOwner) { posts ->
+                    val post = posts.find { it.key == key }
+                    val likeCount = post?.likeCount ?: 0
+                    binding?.fragmentPostsLikeCounterTextview?.text = "좋아요" + likeCount.toString() +"개"
+                }
             }
         }
 
-        /*
-        if (key != null) {
-            viewModel.getPostDataByKey(key).observe(viewLifecycleOwner) { post ->
-                binding?.fragmentPostsProfileTextview?.text = post.email
-                binding?.fragmentPostsExplainTextview?.text = post.text
-            }
-        }
-         */
-
-
-
-        binding?.fragmentPostsLikeImageview?.setOnClickListener {
-            //likeEvent(position)
-        }
     }
 
     override fun onDestroyView() {

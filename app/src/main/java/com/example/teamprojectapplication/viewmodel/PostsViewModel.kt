@@ -1,8 +1,6 @@
 package com.example.teamprojectapplication.viewmodel
 
-import android.os.Build
-import android.view.animation.Transformation
-import androidx.annotation.RequiresApi
+import android.util.Log
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
@@ -15,14 +13,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.example.teamprojectapplication.Post
 import com.example.teamprojectapplication.repository.PostsRepository
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import java.time.format.DateTimeParseException
 
 class PostsViewModel : ViewModel() {
+    private val repository = PostsRepository()
     private val _posts = MutableLiveData<MutableList<Post>>()
+    private val _isLiked = MutableLiveData<Boolean>()
+    val isLiked: LiveData<Boolean> get() = _isLiked
+    private val _likeStatusMap = mutableMapOf<String, MutableLiveData<Boolean>>()
+
+
     val posts : LiveData<MutableList<Post>> get() = _posts
 
     val nonPrivatePosts: LiveData<MutableList<Post>> = _posts.map { postList ->
@@ -30,7 +30,13 @@ class PostsViewModel : ViewModel() {
             reverse()
         }
     }
-    private val repository = PostsRepository()
+
+
+    val myPosts:LiveData<MutableList<Post>> = _posts.map{ postList ->
+        postList.filter{it.email == repository.getCurrUserEmail()}.toMutableList()
+    }
+
+
     init {
         repository.observePost(_posts)
     }
@@ -42,6 +48,7 @@ class PostsViewModel : ViewModel() {
     var key: String? = null
 
     fun bringKey(postKey: String) {
+        Log.d("func","bringkey called")
         key = postKey
     }
 
@@ -112,94 +119,36 @@ class PostsViewModel : ViewModel() {
         repository.setPost(post.value)
     }
 
-    fun bringEmail(key: String, callback: (String?)-> Unit) : String {
-        val email : String
-        email = repository.bringEmail(key, callback).toString()
-        return email
+    fun bringEmail(key: String, callback: (String?)-> Unit) {
+        repository.bringContent(key, "email", callback)
     }
 
-    fun bringText(key: String, callback: (String?)-> Unit) : String {
-        val text : String
-        text = repository.bringText(key, callback).toString()
-        return text
+    fun bringText(key: String, callback: (String?)-> Unit)  {
+        repository.bringContent(key, "text", callback)
     }
 
-    fun getPostDataByKey(key: String): LiveData<Post> {
-
-        val postData = MutableLiveData<Post>()
-
-        val databaseReference = FirebaseDatabase.getInstance().reference.child("post").child(key)
-
-        if(databaseReference != null ) {
-            databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val post = dataSnapshot.getValue(Post::class.java)
-                    postData.value = post!!
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-            })
-
-        }
-
-        return postData
+    // 게시물의 좋아요 상태를 얻거나 없으면 생성하는 함수
+    private fun getLikeStatusLiveData(postKey: String): MutableLiveData<Boolean> {
+        return _likeStatusMap.getOrPut(postKey) { MutableLiveData() }
     }
 
-    /*fun findKey(postKey: String) {
+    // 게시물의 좋아요 상태를 관찰하는 함수
+    fun observeLikeStatus(postKey: String): LiveData<Boolean> {
+        return getLikeStatusLiveData(postKey)
+    }
 
-    }
-    fun setUser() {
-        repository.setUser()
-    }
-    fun setPost() {
-        repository.setPost()
-    }
-    fun setTitle(newValue: String) {
-        repository.postValue("title", newValue)
-    }
-    fun setText(newValue: String) {
-        repository.postValue("text", newValue)
-    }
-    fun setDate(newValue: String) {
-        repository.postValue("date", newValue)
-    }
-    fun setDday(newValue: String) {
-        //date
-        setDate(newValue)
-        //dday
-        try {
-            val selectedDate = LocalDate.parse(newValue, DateTimeFormatter.ISO_DATE)
-            val difference = LocalDate.now().until(selectedDate, ChronoUnit.DAYS).toInt()
-            val resOfDifference = when {
-                difference > 0 -> "D-$difference"
-                difference < 0 -> "D$difference"
-                else -> "D-day"
+    fun likePost(postKey: String) {
+        val userId = repository.fbAuth?.currentUser?.uid
+
+        if (userId != null) {
+            repository.likePost(postKey, userId)
+            val likeStatusLiveData = getLikeStatusLiveData(postKey)
+            likeStatusLiveData.value = if (likeStatusLiveData.value == null) {
+                true
+            } else {
+                !(likeStatusLiveData.value!!)
             }
-            repository.postValue("dday", resOfDifference)
-        }catch (e:DateTimeParseException){
-            repository.postValue("key","Invalid Date Format")
         }
     }
-    val getDday get() = posts.value?.firstOrNull()?.dday
 
-    fun setLikeCount(newValue: Int) {
-        repository.postValue("likecount", newValue.toString())
-    }
-    fun setCommentCount(newValue: Int) {
-        repository.postValue("commentCount", newValue.toString())
-    }
-    fun setPrivate(newValue: Boolean) {
-        repository.private(newValue)
-    }
-
-    fun setColor(newValue: Int) {
-        val hexRed = newValue.red.toString(16).padStart(2, '0')
-        val hexGreen = newValue.green.toString(16).padStart(2, '0')
-        val hexBlue = newValue.blue.toString(16).padStart(2, '0')
-        repository.postValue("color", "#$hexRed$hexGreen$hexBlue")
-    }
-
-     */
 }

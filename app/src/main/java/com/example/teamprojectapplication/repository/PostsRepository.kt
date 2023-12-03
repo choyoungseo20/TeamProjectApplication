@@ -23,7 +23,7 @@ class PostsRepository() {
     val userRef get() = database.getReference("user")
     val postRef get() = database.getReference("post")
     val fbAuth get() = Firebase.auth
-    //var index: String? = null
+
 
 
     val storage get() = Firebase.storage
@@ -70,7 +70,34 @@ class PostsRepository() {
         return fbAuth?.currentUser?.email.toString()
     }
 
+    fun addComment(postKey: String, comment: Post.Comment) {
+        postRef.child(postKey).child("comments").push().setValue(comment)
+    }
 
+    fun updateCommentCount(postKey: String, count: Int) {
+        postRef.child(postKey).child("commentCount").setValue(count)
+    }
+
+
+    fun observeComments(postKey: String, comments: MutableLiveData<MutableList<Post.Comment>>) {
+        val commentsRef = postRef.child(postKey).child("comments")
+        commentsRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val commentsList = mutableListOf<Post.Comment>()
+                for (commentSnapshot in snapshot.children) {
+                    val comment = commentSnapshot.getValue(Post.Comment::class.java)
+                    comment?.let {
+                        commentsList.add(it)
+                    }
+                }
+                comments.value = commentsList
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // 오류 처리
+            }
+        })
+    }
 
     fun setPost(post: Post?){
         val postKey = postRef.push().key
@@ -102,7 +129,6 @@ class PostsRepository() {
         })
     }
 
-    private  val likedMap: MutableMap<String, MutableMap<String,Boolean>> = mutableMapOf()
     fun likePost(postKey: String, userId: String) {
         val postLikesRef = postRef.child(postKey).child("likes")
         postLikesRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -126,8 +152,6 @@ class PostsRepository() {
                 postRef.child(postKey).child("likeCount").setValue(likesMap.size)
                 // 좋아요 맵 업데이트
                 postLikesRef.setValue(likesMap)
-
-
             }
 
             override fun onCancelled(error: DatabaseError) {

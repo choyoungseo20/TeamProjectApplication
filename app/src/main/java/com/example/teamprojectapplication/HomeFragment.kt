@@ -30,8 +30,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //val intent = Intent(this.context, PostFragment::class.java)
-
         // RecyclerView 초기화
         //현재 Fragment의 컨텍스트로 LinearLayoutManager 초기화
         binding?.recDdays?.layoutManager = LinearLayoutManager(context)

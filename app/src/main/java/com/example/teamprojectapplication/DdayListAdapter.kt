@@ -1,5 +1,6 @@
 package com.example.teamprojectapplication
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ class DdayListAdapter(val posts: LiveData<MutableList<Post>>) :RecyclerView.Adap
                 binding.txtTitle.text = post.title
                 binding.txtDate.text = post.date
                 binding.txtDday.text = post.dday
+                binding.root.setBackgroundColor(Color.parseColor(post.color))
                 binding.txtLike.text = post.likeCount.toString()
                 binding.txtComment.text = post.commentCount.toString()
                 val key = post.key

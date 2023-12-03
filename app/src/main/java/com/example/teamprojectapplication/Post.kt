@@ -1,5 +1,7 @@
 package com.example.teamprojectapplication
 
+import java.security.Key
+
 data class Post(
     val email: String = "",
     val title: String = "",
@@ -15,10 +17,8 @@ data class Post(
     val key: String =""
 ) {
     data class Comment(
-        val uid: String = "",
         val userId: String = "",
         val content: String = "",
-        val timeStamp: Long? = null
-
+        val commentKey: String = "",
     )
 }

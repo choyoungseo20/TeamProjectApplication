@@ -6,18 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.example.teamprojectapplication.databinding.FragmentHomeBinding
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.teamprojectapplication.databinding.FragmentPostBinding
 import com.example.teamprojectapplication.viewmodel.PostsViewModel
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.Transaction
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.database
 
 
 class PostFragment : Fragment() {
@@ -25,12 +17,6 @@ class PostFragment : Fragment() {
     var binding: FragmentPostBinding? =null
     val viewModel: PostsViewModel by activityViewModels()
 
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +32,11 @@ class PostFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val key = viewModel.retriveKey()
+
+        binding?.recComments?.layoutManager = LinearLayoutManager(context)
+
+
+        val commentAdapter = CommentListAdapter(viewModel.comments)
 
         if (key != null) {
             viewModel.posts.observe(viewLifecycleOwner) {
@@ -67,8 +58,25 @@ class PostFragment : Fragment() {
                     val likeCount = post?.likeCount ?: 0
                     binding?.fragmentPostsLikeCounterTextview?.text = "좋아요" + likeCount.toString() +"개"
                 }
+                binding?.commentBtnSend?.setOnClickListener {
+                    val commentContent = binding?.commentEditContent?.text.toString()
+                    val userId = FirebaseAuth.getInstance().currentUser?.email // 또는 다른 방식으로 현재 사용자 ID를 가져옴
+
+                    if (commentContent.isNotEmpty() && userId!!.isNotEmpty()) {
+                        val comment = Post.Comment(userId = userId, content = commentContent)
+                        viewModel.addComment(key, comment)
+                    }
+                }
+                key?.let { postKey ->
+                    viewModel.observeComments(postKey)
+                    viewModel.comments.observe(viewLifecycleOwner) {
+                        binding?.recComments?.adapter?.notifyDataSetChanged()
+                    }
+                }
+                binding?.recComments?.adapter = commentAdapter
             }
         }
+
 
     }
 

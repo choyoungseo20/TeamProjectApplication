@@ -19,6 +19,7 @@ class PostsViewModel : ViewModel() {
     private val repository = PostsRepository()
     private val _posts = MutableLiveData<MutableList<Post>>()
     private val _isLiked = MutableLiveData<Boolean>()
+    private val _comments = MutableLiveData<MutableList<Post.Comment>>()
     val isLiked: LiveData<Boolean> get() = _isLiked
     private val _likeStatusMap = mutableMapOf<String, MutableLiveData<Boolean>>()
 
@@ -31,10 +32,14 @@ class PostsViewModel : ViewModel() {
         }
     }
 
-
+    //현재 접속자의 id와 일치하는 포스트만 필터링하여 뜨우는 함수
     val myPosts:LiveData<MutableList<Post>> = _posts.map{ postList ->
-        postList.filter{it.email == repository.getCurrUserEmail()}.toMutableList()
+        postList.filter{it.email == repository.getCurrUserEmail()}.toMutableList().apply{
+            reverse()
+        }
     }
+
+    val comments : LiveData<MutableList<Post.Comment>> get() = _comments
 
 
     init {
@@ -118,6 +123,32 @@ class PostsViewModel : ViewModel() {
     fun setPost() {
         repository.setPost(post.value)
     }
+
+    private val _comment = MutableLiveData(Post.Comment())
+    val comment: LiveData<Post.Comment>
+        get() = _comment
+
+    fun addComment(postKey: String, comment: Post.Comment) {
+        repository.addComment(postKey, comment)
+        //댓글 추가될 때마다 댓글 개수 업데이트
+        val currentCommentCount = _comments.value?.size ?: 0
+        val newCommentCount = currentCommentCount + 1
+        repository.updateCommentCount(postKey, newCommentCount)
+    }
+
+    fun observeComments(postKey: String) {
+        repository.observeComments(postKey, _comments)
+    }
+    /*
+    fun observeCommentCount(postKey: String): LiveData<Int> {
+        val commentCountLiveData = MutableLiveData<Int>()
+
+        repository.observeComments(postKey, _comments)
+        _comments.observeForever{
+            commentCountLiveData.value = it.size
+        }
+        return commentCountLiveData
+    }*/
 
     fun bringEmail(key: String, callback: (String?)-> Unit) {
         repository.bringContent(key, "email", callback)

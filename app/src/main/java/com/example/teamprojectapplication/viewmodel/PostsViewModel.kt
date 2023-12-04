@@ -8,12 +8,15 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.example.teamprojectapplication.Post
 import com.example.teamprojectapplication.repository.PostsRepository
+import com.google.firebase.database.values
 import java.time.format.DateTimeParseException
+import kotlin.math.abs
 
 class PostsViewModel : ViewModel() {
     private val repository = PostsRepository()
@@ -83,10 +86,11 @@ class PostsViewModel : ViewModel() {
     fun calDiffernce(date: String) : String {
         try{
             val selectedDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE)
-            val difference = LocalDate.now().until(selectedDate, ChronoUnit.DAYS).toInt()
+            val today = LocalDate.now()
+            val difference = today.until(selectedDate, ChronoUnit.DAYS).toInt()
             val resOfDifference = when {
-                difference > 0 -> "D-$difference"
-                difference < 0 -> "D$difference"
+                selectedDate.isBefore(today) -> "D+${abs(difference)}"
+                selectedDate.isAfter(today) -> "D-$difference"
                 else -> "D-day"
             }
             return resOfDifference
@@ -106,6 +110,7 @@ class PostsViewModel : ViewModel() {
             private = private
         )
     }
+    /*
     private fun rgbTohex(color: Int): String{
         val hexRed = color.red.toString(16).padStart(2, '0')
         val hexGreen = color.green.toString(16).padStart(2, '0')
@@ -114,15 +119,14 @@ class PostsViewModel : ViewModel() {
         return "#$hexRed$hexGreen$hexBlue"
     }
 
+     */
     fun setColor(color: Int){
-        val colorData = rgbTohex(color)
+        //val colorData = rgbTohex(color)
         _post.value = _post.value?.copy(
-            color = colorData
+            color = color
         )
     }
-    fun setPost() {
-        repository.setPost(post.value)
-    }
+    fun setPost() = repository.setPost(post.value)
 
     private val _comment = MutableLiveData(Post.Comment())
     val comment: LiveData<Post.Comment>
@@ -167,6 +171,25 @@ class PostsViewModel : ViewModel() {
     fun observeLikeStatus(postKey: String): LiveData<Boolean> {
         return getLikeStatusLiveData(postKey)
     }
+
+    fun searchWord(word : String) {
+        repository.searchWord(word)
+    }
+
+    fun getSearchWord(): LiveData<String?> {
+        val userId = repository.fbAuth?.currentUser?.uid
+            ?: return MutableLiveData<String?>().apply { value = null }
+        return repository.getWord()
+    }
+
+    val searchPosts: LiveData<MutableList<Post>> = _posts.map { postList ->
+        val word = getSearchWord().value // LiveData의 값을 가져옴
+        postList.filter { !it.private && (it.email == word) }.toMutableList().apply {
+            reverse()
+        }
+    }
+
+
 
     fun likePost(postKey: String) {
         val userId = repository.fbAuth?.currentUser?.uid

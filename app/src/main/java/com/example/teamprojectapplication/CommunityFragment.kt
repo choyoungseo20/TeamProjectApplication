@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,6 +33,13 @@ class CommunityFragment : Fragment() {
             binding?.recPosts?.adapter?.notifyDataSetChanged()
         }
 
+        binding?.edtSearch?.setOnEditorActionListener{_,actionId,_ ->
+            if(actionId == EditorInfo.IME_ACTION_DONE){
+                viewModel.searchWord(binding?.edtSearch?.text.toString())
+                findNavController().navigate(R.id.action_communityFragment_to_searchFragment)
+                true}else false
+        }
+
         val adapter = PostListAdapter(viewModel.nonPrivatePosts)
         adapter.setOnItemClickListener(object : PostListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int, key: String) {
@@ -45,9 +53,7 @@ class CommunityFragment : Fragment() {
         binding?.recPosts?.setHasFixedSize(true)
 
 
-        binding?.edtSearch?.setOnClickListener {
-            findNavController().navigate(R.id.action_communityFragment_to_searchFragment)
-        }
+
 
     }
 

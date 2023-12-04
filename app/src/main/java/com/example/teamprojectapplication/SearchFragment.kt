@@ -1,10 +1,12 @@
 package com.example.teamprojectapplication
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
@@ -27,22 +29,22 @@ class SearchFragment : Fragment() {
         return binding?.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-    /*
-        viewModel.posts.observe(viewLifecycleOwner){
+
+        viewModel.getSearchWord().observe(viewLifecycleOwner){
+            binding?.edtSearch?.setText(it)
+        }
+        viewModel.searchPosts.observe(viewLifecycleOwner){
             binding?.recSearchPosts?.adapter?.notifyDataSetChanged()
         }
 
-
-
-
         binding?.recSearchPosts?.layoutManager = LinearLayoutManager(context)
-        binding?.recSearchPosts?.adapter = SearchPostAdapter(viewModel.nonPrivatePosts)
+        binding?.recSearchPosts?.adapter = SearchPostAdapter(viewModel.searchPosts)
 
 
 
-     */
 
         val callback = object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {

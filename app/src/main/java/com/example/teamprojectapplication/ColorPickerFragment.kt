@@ -42,7 +42,7 @@ class ColorPickerFragment : DialogFragment() {
             }
         })
 
-        binding?.btnColorsave?.setOnClickListener {
+        binding?.btnColorEnd?.setOnClickListener {
             dismissAllowingStateLoss()
         }
     }

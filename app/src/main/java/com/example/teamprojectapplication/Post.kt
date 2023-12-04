@@ -13,7 +13,7 @@ data class Post(
     val likes: MutableMap<String, Boolean> = HashMap(),
     val commentCount: Int = 0,
     val private: Boolean = false,
-    val color: String = "",
+    val color: Int = 0,
     val key: String =""
 ) {
     data class Comment(

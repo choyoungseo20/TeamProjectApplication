@@ -1,6 +1,7 @@
 package com.example.teamprojectapplication.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.teamprojectapplication.Post
 import com.google.firebase.Firebase
@@ -22,6 +23,7 @@ class PostsRepository() {
     val database get() = Firebase.database
     val userRef get() = database.getReference("user")
     val postRef get() = database.getReference("post")
+    val searchRef get() = database.getReference("search")
     val fbAuth get() = Firebase.auth
 
 
@@ -129,6 +131,7 @@ class PostsRepository() {
         })
     }
 
+    private  val likedMap: MutableMap<String, MutableMap<String,Boolean>> = mutableMapOf()
     fun likePost(postKey: String, userId: String) {
         val postLikesRef = postRef.child(postKey).child("likes")
         postLikesRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -159,5 +162,27 @@ class PostsRepository() {
             }
         })
     }
+    fun searchWord(word : String){
+        val userId = fbAuth?.currentUser?.uid
+        userId?.let {
+            searchRef.child(it).setValue(word)
+        }
+    }
 
+    fun getWord(): LiveData<String?> {
+        val userId = fbAuth?.currentUser?.uid
+        val resultLiveData = MutableLiveData<String?>()
+
+        userId?.let {
+            searchRef.child(it).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val value = snapshot.getValue(String::class.java)
+                    resultLiveData.value = value
+                }
+
+                override fun onCancelled(error: DatabaseError){}
+            })
+        }
+        return resultLiveData
+    }
 }

@@ -33,8 +33,11 @@ class PostsViewModel : ViewModel() {
     val comments : LiveData<MutableList<Post.Comment>> get() = _comments
     private val _comment = MutableLiveData(Post.Comment())
     val comment: LiveData<Post.Comment> get() = _comment
+    private val _searchWord = MutableLiveData<String>()
+    val searchWord : LiveData<String> get() = _searchWord
     private val _likeStatusMap = mutableMapOf<String, MutableLiveData<Boolean>>()
     lateinit var key: String
+
 
     init {
         repository.observePost(_posts)
@@ -46,7 +49,7 @@ class PostsViewModel : ViewModel() {
         }
     }
 
-    //현재 접속자의 id와 일치하는 포스트만 필터링하여 뜨우는 함수
+    //현재 접속자의 id와 일치하는 포스트만 필터링하여 띄우는 함수
     val myPosts:LiveData<MutableList<Post>> = _posts.map { postList ->
         postList.filter { it.email == FirebaseAuth.getInstance().currentUser?.email }
             .toMutableList().apply {
@@ -59,6 +62,32 @@ class PostsViewModel : ViewModel() {
         }
     }
 
+    //공개 포스트 중 작성자를 기준으로 게시글 검색
+    val searchPosts: LiveData<MutableList<Post>> = MediatorLiveData<MutableList<Post>>().apply {
+        // 관찰 하려는 LiveData (nonPrivatePosts , searchWord)
+        addSource(nonPrivatePosts) { nonPrivatePosts ->
+            _searchWord.value?.let {
+                value = nonPrivatePosts.filter { it.email == _searchWord.value }.toMutableList().apply {
+                    reverse()
+                }
+            }
+        }
+
+        addSource(searchWord) { searchTerm ->
+            val nonPrivatePostsValue = nonPrivatePosts.value
+            nonPrivatePostsValue?.let {
+                value = nonPrivatePostsValue.filter { it.email == searchTerm }.toMutableList().apply {
+                    reverse()
+                }
+            }
+        }
+        // 두 LiveData의 변경을 observe하고, filter를 수행하여 searchPosts를 업데이트 함.
+    }
+
+    fun observeSearchWord():LiveData<String>{
+        repository.observeSearchWord(_searchWord)
+        return searchWord
+    }
 
     fun bringKey(postKey: String) {
         Log.d("func","bringkey called")
@@ -89,18 +118,16 @@ class PostsViewModel : ViewModel() {
         )
     }
     fun calDiffernce(date: String) : String {
-        try{
+        return try{
             val selectedDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE)
             val today = LocalDate.now()
             val difference = today.until(selectedDate, ChronoUnit.DAYS).toInt()
-            val resOfDifference = when {
+            when{
                 selectedDate.isBefore(today) -> "D+${abs(difference)}"
                 selectedDate.isAfter(today) -> "D-$difference"
-                else -> "D-day"
-            }
-            return resOfDifference
+                else -> "D-day" }
         }catch (e: DateTimeParseException){
-            return "Error"
+            "Error"
         }
 
     }
@@ -164,19 +191,6 @@ class PostsViewModel : ViewModel() {
         repository.searchWord(word)
     }
 
-    fun getSearchWord(): LiveData<String?> {
-        val userId = repository.fbAuth?.currentUser?.uid
-            ?: return MutableLiveData<String?>().apply { value = null }
-        return repository.getWord()
-    }
-
-    val searchPosts: LiveData<MutableList<Post>> = _posts.map { postList ->
-        val word = getSearchWord().value // LiveData의 값을 가져옴
-        postList.filter { !it.private && (it.email == word) }.toMutableList().apply {
-            reverse()
-        }
-    }
-
     fun likePost(postKey: String) {
         val userId = repository.fbAuth?.currentUser?.uid
         repository.likePost(postKey, userId!!)
@@ -185,8 +199,12 @@ class PostsViewModel : ViewModel() {
         return repository.observeLikeStatus(postKey, userId)
     }
 
+    /*
     fun imageUpload(uri: Uri) {
         repository.imageUpload(uri)
     }
+
+     */
+
 
 }

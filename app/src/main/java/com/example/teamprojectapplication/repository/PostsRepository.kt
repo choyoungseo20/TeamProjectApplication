@@ -34,6 +34,7 @@ class PostsRepository() {
     val storageRef get() = storage.getReference("image")
     val fileName get() = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
     val mountainsRef get() = storageRef.child("${fileName}.png")
+    /*
     fun imageUpload(uri: Uri) {
         val uploadTask = mountainsRef.putFile(uri)
         uploadTask.addOnSuccessListener { taskSnapshot ->
@@ -43,6 +44,7 @@ class PostsRepository() {
         }
     }
 
+
     private fun imageDownload() {
         val downloadTask = mountainsRef.downloadUrl
         downloadTask.addOnSuccessListener { uri ->
@@ -51,6 +53,8 @@ class PostsRepository() {
 
         }
     }
+
+     */
 
 
 
@@ -212,20 +216,19 @@ class PostsRepository() {
         }
     }
 
-    fun getWord(): LiveData<String?> {
-        val userId = fbAuth?.currentUser?.uid
-        val resultLiveData = MutableLiveData<String?>()
-
+    fun observeSearchWord(word : MutableLiveData<String>){
+        val userId = fbAuth.currentUser?.uid
         userId?.let {
-            searchRef.child(it).addListenerForSingleValueEvent(object : ValueEventListener {
+            searchRef.child(userId).addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val value = snapshot.getValue(String::class.java)
-                    resultLiveData.value = value
+                    word.postValue(snapshot.getValue(String::class.java))
                 }
 
-                override fun onCancelled(error: DatabaseError){}
+                override fun onCancelled(error: DatabaseError) {
+                }
+
             })
         }
-        return resultLiveData
     }
+
 }

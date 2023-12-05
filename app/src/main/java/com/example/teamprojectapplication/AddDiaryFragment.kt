@@ -20,14 +20,8 @@ import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AddDiaryFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AddDiaryFragment : Fragment() {
 
     var binding : FragmentAddDiaryBinding? = null
@@ -56,10 +50,13 @@ class AddDiaryFragment : Fragment() {
             registerForActivityResult.launch(intent)
         }
 
+        /*
         binding?.btnUpload?.setOnClickListener {
             viewModel.imageUpload(uri)
             //imageUpload(uri)
         }
+
+         */
 
         binding?.btnSkip?.setOnClickListener {
             viewModel.setPost()

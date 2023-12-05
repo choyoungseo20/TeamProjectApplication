@@ -29,32 +29,37 @@ class SearchFragment : Fragment() {
         return binding?.root
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel.getSearchWord().observe(viewLifecycleOwner){
+        viewModel.observeSearchWord().observe(viewLifecycleOwner){
             binding?.edtSearch?.setText(it)
         }
         viewModel.searchPosts.observe(viewLifecycleOwner){
             binding?.recSearchPosts?.adapter?.notifyDataSetChanged()
         }
 
-        binding?.recSearchPosts?.layoutManager = LinearLayoutManager(context)
-        binding?.recSearchPosts?.adapter = SearchPostAdapter(viewModel.searchPosts)
 
-
-
-
-        val callback = object : OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.action_searchFragment_to_communityFragment)
+        val adapter = SearchPostAdapter(viewModel.searchPosts)
+        adapter.setOnItemClickListener(object : SearchPostAdapter.OnItemClickListener {
+            override fun onItemClick(view: View, position: Int, key: String) {
+                viewModel.bringKey(key)
+                findNavController().navigate(R.id.action_searchFragment_to_postFragment)
             }
-        }
-    }
+        })
+        binding?.recSearchPosts?.adapter = adapter
+        binding?.recSearchPosts?.layoutManager = LinearLayoutManager(context)
+        binding?.recSearchPosts?.setHasFixedSize(true)
 
+        binding?.edtSearch?.setOnEditorActionListener{_,actionId,_ ->
+            if(actionId == EditorInfo.IME_ACTION_DONE){
+                viewModel.searchWord(binding?.edtSearch?.text.toString())
+                true}else false
+        }
+
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        binding = null
     }
 }

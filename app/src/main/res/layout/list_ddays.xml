@@ -5,8 +5,7 @@
     android:id="@+id/dday_background"
     android:layout_width="match_parent"
     android:layout_height="128dp"
-    android:background="#FFFFFF"
-    >
+    android:background="#FFFFFF">
 
     <ImageView
         android:id="@+id/imageView2"

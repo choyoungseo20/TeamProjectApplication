@@ -1,6 +1,7 @@
 package com.example.teamprojectapplication
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +10,7 @@ import com.example.teamprojectapplication.databinding.ListSearchBinding
 class SearchPostAdapter(private val posts: LiveData<MutableList<Post>>) :
     RecyclerView.Adapter<SearchPostAdapter.ViewHolder>() {
 
-    class ViewHolder(private val binding: ListSearchBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ListSearchBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(post: Post?) {
             post?.let {
                 binding.txtSearchCommentcount.text = it.commentCount.toString()
@@ -17,8 +18,26 @@ class SearchPostAdapter(private val posts: LiveData<MutableList<Post>>) :
                 binding.txtSearchUsername.text = it.email
                 binding.txtSearchTitle.text = it.title
                 binding.txtSearchLikecount.text = it.likeCount.toString()
+                val key = post.key
+
+                binding.root.setOnClickListener {
+                    val pos = adapterPosition
+                    if(pos != RecyclerView.NO_POSITION && itemClickListener != null){
+                        itemClickListener.onItemClick(itemView,pos, key )
+                    }
+                }
             }
         }
+    }
+
+    interface OnItemClickListener{
+        fun onItemClick(view: View, position: Int, key: String)
+
+    }
+    private lateinit var itemClickListener: OnItemClickListener
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener){
+        itemClickListener = onItemClickListener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

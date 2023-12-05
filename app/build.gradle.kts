@@ -60,6 +60,8 @@ dependencies {
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
     implementation("com.github.skydoves:colorpickerview:2.3.0")
     implementation("com.google.firebase:firebase-storage:20.3.0")
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

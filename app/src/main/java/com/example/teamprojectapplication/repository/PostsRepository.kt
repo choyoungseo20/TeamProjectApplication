@@ -1,20 +1,22 @@
 package com.example.teamprojectapplication.repository
 
+import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.teamprojectapplication.AddDiaryFragment
+import com.example.teamprojectapplication.MainActivity
 import com.example.teamprojectapplication.Post
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.Transaction
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
-import com.google.firebase.database.values
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.storage
-import java.security.Key
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -32,6 +34,23 @@ class PostsRepository() {
     val storageRef get() = storage.getReference("image")
     val fileName get() = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
     val mountainsRef get() = storageRef.child("${fileName}.png")
+    fun imageUpload(uri: Uri) {
+        val uploadTask = mountainsRef.putFile(uri)
+        uploadTask.addOnSuccessListener { taskSnapshot ->
+            //Toast.makeText(AddDiaryFragment(), "사진 업로드 성공", Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener {
+            //Toast.makeText(MainActivity(), "사진 업로드 실패", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun imageDownload() {
+        val downloadTask = mountainsRef.downloadUrl
+        downloadTask.addOnSuccessListener { uri ->
+
+        }.addOnFailureListener {
+
+        }
+    }
 
 
 

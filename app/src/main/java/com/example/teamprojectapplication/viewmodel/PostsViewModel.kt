@@ -1,5 +1,6 @@
 package com.example.teamprojectapplication.viewmodel
 
+import android.net.Uri
 import android.util.Log
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
@@ -23,9 +24,21 @@ import kotlin.math.abs
 class PostsViewModel : ViewModel() {
     private val repository = PostsRepository()
     private val _posts = MutableLiveData<MutableList<Post>>()
-    private val _comments = MutableLiveData<MutableList<Post.Comment>>()
-
     val posts : LiveData<MutableList<Post>> get() = _posts
+    private val _post = MutableLiveData(Post())
+    val post: LiveData<Post> get() = _post
+    private val _isLiked = MutableLiveData<Boolean>()
+    val isLiked: LiveData<Boolean> get() = _isLiked
+    private val _comments = MutableLiveData<MutableList<Post.Comment>>()
+    val comments : LiveData<MutableList<Post.Comment>> get() = _comments
+    private val _comment = MutableLiveData(Post.Comment())
+    val comment: LiveData<Post.Comment> get() = _comment
+    private val _likeStatusMap = mutableMapOf<String, MutableLiveData<Boolean>>()
+    lateinit var key: String
+
+    init {
+        repository.observePost(_posts)
+    }
 
     val nonPrivatePosts: LiveData<MutableList<Post>> = _posts.map { postList ->
         postList.filterNot { it.private }.toMutableList().apply {
@@ -34,24 +47,18 @@ class PostsViewModel : ViewModel() {
     }
 
     //현재 접속자의 id와 일치하는 포스트만 필터링하여 뜨우는 함수
-    val myPosts:LiveData<MutableList<Post>> = _posts.map{ postList ->
-        postList.filter{it.email == FirebaseAuth.getInstance().currentUser?.email}.toMutableList().apply{
+    val myPosts:LiveData<MutableList<Post>> = _posts.map { postList ->
+        postList.filter { it.email == FirebaseAuth.getInstance().currentUser?.email }
+            .toMutableList().apply {
             reverse()
+            for (post in this) {
+                // 예시: 현재 dday 값을 10으로 변경
+                post.dday = calDiffernce(post.date)
+                // 또는 원하는 로직에 따라 dday 값을 변경
+            }
         }
     }
 
-    val comments : LiveData<MutableList<Post.Comment>> get() = _comments
-
-
-    init {
-        repository.observePost(_posts)
-    }
-
-    private val _post = MutableLiveData(Post())
-    val post: LiveData<Post>
-        get() = _post
-
-    var key: String? = null
 
     fun bringKey(postKey: String) {
         Log.d("func","bringkey called")
@@ -97,10 +104,17 @@ class PostsViewModel : ViewModel() {
         }
 
     }
-    fun setDday(dday: String) {
+    /*fun setDday(dday: String) {
         val ddayData = calDiffernce(dday)
         _post.value = _post.value?.copy(
             dday = ddayData
+        )
+    }
+
+     */
+    fun setImageUrl(url: String) {
+        _post.value = _post.value?.copy(
+            imageUrl = url
         )
     }
     fun setPrivate(private: Boolean) {
@@ -163,13 +177,16 @@ class PostsViewModel : ViewModel() {
         }
     }
 
-
     fun likePost(postKey: String) {
         val userId = repository.fbAuth?.currentUser?.uid
         repository.likePost(postKey, userId!!)
     }
     fun observeLikeStatus(postKey: String, userId: String): LiveData<Boolean> {
         return repository.observeLikeStatus(postKey, userId)
+    }
+
+    fun imageUpload(uri: Uri) {
+        repository.imageUpload(uri)
     }
 
 }

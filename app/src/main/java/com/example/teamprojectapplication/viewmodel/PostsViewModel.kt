@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.example.teamprojectapplication.Post
 import com.example.teamprojectapplication.repository.PostsRepository
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.values
 import java.time.format.DateTimeParseException
 import kotlin.math.abs
@@ -21,11 +23,7 @@ import kotlin.math.abs
 class PostsViewModel : ViewModel() {
     private val repository = PostsRepository()
     private val _posts = MutableLiveData<MutableList<Post>>()
-    private val _isLiked = MutableLiveData<Boolean>()
     private val _comments = MutableLiveData<MutableList<Post.Comment>>()
-    val isLiked: LiveData<Boolean> get() = _isLiked
-    private val _likeStatusMap = mutableMapOf<String, MutableLiveData<Boolean>>()
-
 
     val posts : LiveData<MutableList<Post>> get() = _posts
 
@@ -37,7 +35,7 @@ class PostsViewModel : ViewModel() {
 
     //현재 접속자의 id와 일치하는 포스트만 필터링하여 뜨우는 함수
     val myPosts:LiveData<MutableList<Post>> = _posts.map{ postList ->
-        postList.filter{it.email == repository.getCurrUserEmail()}.toMutableList().apply{
+        postList.filter{it.email == FirebaseAuth.getInstance().currentUser?.email}.toMutableList().apply{
             reverse()
         }
     }
@@ -128,10 +126,6 @@ class PostsViewModel : ViewModel() {
     }
     fun setPost() = repository.setPost(post.value)
 
-    private val _comment = MutableLiveData(Post.Comment())
-    val comment: LiveData<Post.Comment>
-        get() = _comment
-
     fun addComment(postKey: String, comment: Post.Comment) {
         repository.addComment(postKey, comment)
         //댓글 추가될 때마다 댓글 개수 업데이트
@@ -143,16 +137,6 @@ class PostsViewModel : ViewModel() {
     fun observeComments(postKey: String) {
         repository.observeComments(postKey, _comments)
     }
-    /*
-    fun observeCommentCount(postKey: String): LiveData<Int> {
-        val commentCountLiveData = MutableLiveData<Int>()
-
-        repository.observeComments(postKey, _comments)
-        _comments.observeForever{
-            commentCountLiveData.value = it.size
-        }
-        return commentCountLiveData
-    }*/
 
     fun bringEmail(key: String, callback: (String?)-> Unit) {
         repository.bringContent(key, "email", callback)
@@ -160,16 +144,6 @@ class PostsViewModel : ViewModel() {
 
     fun bringText(key: String, callback: (String?)-> Unit)  {
         repository.bringContent(key, "text", callback)
-    }
-
-    // 게시물의 좋아요 상태를 얻거나 없으면 생성하는 함수
-    private fun getLikeStatusLiveData(postKey: String): MutableLiveData<Boolean> {
-        return _likeStatusMap.getOrPut(postKey) { MutableLiveData() }
-    }
-
-    // 게시물의 좋아요 상태를 관찰하는 함수
-    fun observeLikeStatus(postKey: String): LiveData<Boolean> {
-        return getLikeStatusLiveData(postKey)
     }
 
     fun searchWord(word : String) {
@@ -190,19 +164,12 @@ class PostsViewModel : ViewModel() {
     }
 
 
-
     fun likePost(postKey: String) {
         val userId = repository.fbAuth?.currentUser?.uid
-
-        if (userId != null) {
-            repository.likePost(postKey, userId)
-            val likeStatusLiveData = getLikeStatusLiveData(postKey)
-            likeStatusLiveData.value = if (likeStatusLiveData.value == null) {
-                true
-            } else {
-                !(likeStatusLiveData.value!!)
-            }
-        }
+        repository.likePost(postKey, userId!!)
+    }
+    fun observeLikeStatus(postKey: String, userId: String): LiveData<Boolean> {
+        return repository.observeLikeStatus(postKey, userId)
     }
 
 }

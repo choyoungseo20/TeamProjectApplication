@@ -68,9 +68,6 @@ class PostsRepository() {
             userRef.child(uid).setValue(fbAuth?.currentUser?.email)
         }
     }
-    fun getCurrUserEmail() : String {
-        return fbAuth?.currentUser?.email.toString()
-    }
 
     fun addComment(postKey: String, comment: Post.Comment) {
         postRef.child(postKey).child("comments").push().setValue(comment)
@@ -131,7 +128,6 @@ class PostsRepository() {
         })
     }
 
-    private  val likedMap: MutableMap<String, MutableMap<String,Boolean>> = mutableMapOf()
     fun likePost(postKey: String, userId: String) {
         val postLikesRef = postRef.child(postKey).child("likes")
         postLikesRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -162,6 +158,34 @@ class PostsRepository() {
             }
         })
     }
+    fun observeLikeStatus(postKey: String, userId: String): LiveData<Boolean> {
+        val resultLiveData = MutableLiveData<Boolean>()
+
+        val postLikesRef = postRef.child(postKey).child("likes")
+
+        postLikesRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val likesMap: MutableMap<String, Boolean> = if (snapshot.exists()) {
+                    snapshot.value as MutableMap<String, Boolean>
+                } else {
+                    HashMap()
+                }
+
+                // 현재 사용자의 좋아요 상태 확인
+                val currentUserLiked = likesMap.containsKey(userId)
+
+                // LiveData에 값 업데이트
+                resultLiveData.postValue(currentUserLiked)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // 오류 처리
+            }
+        })
+
+        return resultLiveData
+    }
+
     fun searchWord(word : String){
         val userId = fbAuth?.currentUser?.uid
         userId?.let {

@@ -9,24 +9,13 @@
 
     <ImageView
         android:id="@+id/img_area"
-        android:layout_width="341dp"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_margin="7.5dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_upload"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btn_upload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:backgroundTint="#4CAF50"
-        android:text="이미지 등록"
+        android:src="@drawable/baseline_add_to_photos_24"
         app:layout_constraintBottom_toTopOf="@+id/edt_contents"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText

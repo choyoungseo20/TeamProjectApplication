@@ -21,6 +21,23 @@
             android:id="@+id/fragment_posts_profile_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/btn_modify_post"
+            android:src="@drawable/modify"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="30dp"
+            android:visibility="gone" />
+
+
+        <ImageView
+            android:id="@+id/btn_delete_post"
+            android:src="@drawable/delete"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="5dp"
+            android:visibility="gone" />
     </LinearLayout>
 
     <ImageView

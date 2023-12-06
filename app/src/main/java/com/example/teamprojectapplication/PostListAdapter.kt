@@ -13,7 +13,6 @@ class PostListAdapter(val posts: LiveData<MutableList<Post>>) :RecyclerView.Adap
         fun bind(post: Post?){
             post?.let {
                 binding.listsPostsExplainTextview.text = it.text
-                //binding.listsPostsCommentImageview = post.imgList
                 binding.listsPostsProfileTextview.text = it.email
                 binding.listsPostsLikecounter.text = it.likeCount.toString()
                 binding.listsPostsCommentscounter.text = it.commentCount.toString()

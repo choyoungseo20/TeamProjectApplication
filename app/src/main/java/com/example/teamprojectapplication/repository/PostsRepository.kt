@@ -93,7 +93,15 @@ class PostsRepository() {
     }
 
     fun addComment(postKey: String, comment: Post.Comment) {
-        postRef.child(postKey).child("comments").push().setValue(comment)
+        val commentsRef = postRef.child(postKey).child("comments")
+        val commentKey = commentsRef.push().key
+        commentKey?.let {nonNullableIndex ->
+            commentsRef.child(nonNullableIndex).setValue(comment)
+            commentsRef.child(nonNullableIndex).child("commentKey").setValue(nonNullableIndex)
+        } ?: run {
+            // postKey가 null인 경우에 대한 처리
+            Log.e("PostViewModel", "Failed to generate a key for the comment.")
+        }
     }
 
     fun updateCommentCount(postKey: String, count: Int) {
@@ -138,7 +146,7 @@ class PostsRepository() {
 
     fun bringContent(postKey: String, child: String, callback: (String?) -> Unit)  {
         val postRef2 = FirebaseDatabase.getInstance().reference.child("post").child(postKey)
-        postRef2.child(child).addListenerForSingleValueEvent(object: ValueEventListener{
+        postRef2.child(child).addValueEventListener(object: ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val content = dataSnapshot.getValue(String::class.java)
                 callback(content)
@@ -149,6 +157,15 @@ class PostsRepository() {
                 callback(null)
             }
         })
+    }
+
+    fun deletePost(postKey: String) {
+        postRef.child(postKey).removeValue()
+    }
+
+    fun deleteComment(postKey: String, comment: Post.Comment) {
+        val commentRef = postRef.child(postKey).child("comments").child(comment.commentKey!!)
+        commentRef.removeValue()
     }
 
     fun likePost(postKey: String, userId: String) {

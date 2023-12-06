@@ -27,17 +27,16 @@ class PostsViewModel : ViewModel() {
     val posts : LiveData<MutableList<Post>> get() = _posts
     private val _post = MutableLiveData(Post())
     val post: LiveData<Post> get() = _post
-    private val _isLiked = MutableLiveData<Boolean>()
-    val isLiked: LiveData<Boolean> get() = _isLiked
+
     private val _comments = MutableLiveData<MutableList<Post.Comment>>()
     val comments : LiveData<MutableList<Post.Comment>> get() = _comments
-    private val _comment = MutableLiveData(Post.Comment())
-    val comment: LiveData<Post.Comment> get() = _comment
+
+
     private val _searchWord = MutableLiveData<String>()
     val searchWord : LiveData<String> get() = _searchWord
     private val _likeStatusMap = mutableMapOf<String, MutableLiveData<Boolean>>()
     lateinit var key: String
-
+    lateinit var cKey: String
 
     init {
         repository.observePost(_posts)
@@ -49,7 +48,7 @@ class PostsViewModel : ViewModel() {
         }
     }
 
-    //현재 접속자의 id와 일치하는 포스트만 필터링하여 띄우는 함수
+    //현재 접속자의 id와 일치하는 포스트만 필터링하여 뜨우는 함수
     val myPosts:LiveData<MutableList<Post>> = _posts.map { postList ->
         postList.filter { it.email == FirebaseAuth.getInstance().currentUser?.email }
             .toMutableList().apply {
@@ -88,6 +87,16 @@ class PostsViewModel : ViewModel() {
         repository.observeSearchWord(_searchWord)
         return searchWord
     }
+    fun deletePost(postKey: String) {
+        repository.deletePost(postKey)
+    }
+
+    fun deleteComment(postKey: String, comment: Post.Comment) {
+        repository.deleteComment(postKey, comment)
+        val currentCommentCount = _comments.value?.size ?: 0
+        val newCommentCount = currentCommentCount - 1
+        repository.updateCommentCount(postKey, newCommentCount)
+    }
 
     fun bringKey(postKey: String) {
         Log.d("func","bringkey called")
@@ -96,6 +105,10 @@ class PostsViewModel : ViewModel() {
 
     fun retriveKey(): String? {
         return key
+    }
+
+    fun bringCommentKey(commentKey: String) {
+        cKey = commentKey
     }
 
     fun setUser() {
@@ -175,12 +188,21 @@ class PostsViewModel : ViewModel() {
         repository.searchWord(word)
     }
 
+
     fun likePost(postKey: String) {
         val userId = repository.fbAuth?.currentUser?.uid
         repository.likePost(postKey, userId!!)
     }
     fun observeLikeStatus(postKey: String, userId: String): LiveData<Boolean> {
         return repository.observeLikeStatus(postKey, userId)
+    }
+
+    fun getCurrUserEmail(): String? {
+        return repository.fbAuth?.currentUser?.email
+    }
+
+    fun getCurrUserUid(): String? {
+        return repository.fbAuth?.currentUser?.uid
     }
 
     /*

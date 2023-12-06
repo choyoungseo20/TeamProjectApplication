@@ -38,7 +38,6 @@ class AddDdayFragment : Fragment() {
         }
 
         binding?.btnNext?.setOnClickListener{
-            //viewModel.setDday(binding?.edtDaydate?.text.toString())
             viewModel.setTitle(binding?.edtDaytitle?.text.toString())
             viewModel.setDate(binding?.edtDaydate?.text.toString())
             viewModel.setPrivate(binding?.chkPrivate?.isChecked ?: false)

@@ -17,6 +17,7 @@ import java.util.Date
 import java.util.Locale
 import android.content.Intent
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -52,6 +53,7 @@ class AddDiaryFragment : Fragment() {
 
         /*
         binding?.btnUpload?.setOnClickListener {
+            Log.d("AddDiary", "URI value: $uri") // Log the URI value
             viewModel.imageUpload(uri)
             //imageUpload(uri)
         }

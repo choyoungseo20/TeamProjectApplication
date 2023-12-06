@@ -131,14 +131,7 @@ class PostsViewModel : ViewModel() {
         }
 
     }
-    /*fun setDday(dday: String) {
-        val ddayData = calDiffernce(dday)
-        _post.value = _post.value?.copy(
-            dday = ddayData
-        )
-    }
 
-     */
     fun setImageUrl(url: String) {
         _post.value = _post.value?.copy(
             imageUrl = url
@@ -149,16 +142,7 @@ class PostsViewModel : ViewModel() {
             private = private
         )
     }
-    /*
-    private fun rgbTohex(color: Int): String{
-        val hexRed = color.red.toString(16).padStart(2, '0')
-        val hexGreen = color.green.toString(16).padStart(2, '0')
-        val hexBlue = color.blue.toString(16).padStart(2, '0')
 
-        return "#$hexRed$hexGreen$hexBlue"
-    }
-
-     */
     fun setColor(color: Int){
         //val colorData = rgbTohex(color)
         _post.value = _post.value?.copy(

@@ -1,10 +1,6 @@
 package com.example.teamprojectapplication.viewmodel
 
-import android.net.Uri
 import android.util.Log
-import androidx.core.graphics.blue
-import androidx.core.graphics.green
-import androidx.core.graphics.red
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -13,15 +9,13 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
-import com.example.teamprojectapplication.Post
-import com.example.teamprojectapplication.repository.PostsRepository
-import com.google.firebase.Firebase
+import com.example.teamprojectapplication.Model.Post
+import com.example.teamprojectapplication.Model.PostsRepository
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.values
 import java.time.format.DateTimeParseException
 import kotlin.math.abs
 
-class PostsViewModel : ViewModel() {
+class postViewModel : ViewModel() {
     private val repository = PostsRepository()
     private val _posts = MutableLiveData<MutableList<Post>>()
     val posts : LiveData<MutableList<Post>> get() = _posts
@@ -35,10 +29,8 @@ class PostsViewModel : ViewModel() {
     private val _searchWord = MutableLiveData<String>()
     val searchWord : LiveData<String> get() = _searchWord
 
-
-
-    lateinit var key: String
-    lateinit var cKey: String //댓글 키
+    private lateinit var key: String
+    private lateinit var cKey: String
 
     init {
         repository.observePost(_posts)
@@ -186,6 +178,10 @@ class PostsViewModel : ViewModel() {
         repository.bringContent(key, "text", callback)
     }
 
+    fun bringImage(key: String, callback: (String?)-> Unit) {
+        repository.bringContent(key, "imageUrl", callback)
+    }
+
     fun searchWord(word : String) {
         repository.searchWord(word)
     }
@@ -210,6 +206,35 @@ class PostsViewModel : ViewModel() {
     /*
     fun imageUpload(uri: Uri) {
         repository.imageUpload(uri)
+    }
+
+     */
+
+    /*
+    private val registerForActivityResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            handleImageSelection(result)
+        }
+
+    fun launchImagePicker() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        registerForActivityResult.launch(intent)
+    }
+
+    private fun handleImageSelection(result: ActivityResult) {
+        // 이미지 선택 결과 처리 로직을 여기에 추가
+        when (result.resultCode) {
+            Activity.RESULT_OK -> {
+                val uri: Uri? = result.data?.data
+                uri?.let {
+                    // 이미지 선택 결과를 처리하는 로직을 추가
+                }
+            }
+        }
+    }
+
+    fun onImageAreaClicked() {
+        launchImagePicker()
     }
 
      */

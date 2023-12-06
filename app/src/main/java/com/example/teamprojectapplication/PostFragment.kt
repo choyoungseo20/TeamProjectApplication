@@ -10,15 +10,16 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.teamprojectapplication.databinding.FragmentPostBinding
-import com.example.teamprojectapplication.viewmodel.PostsViewModel
-import com.google.firebase.auth.FirebaseAuth
+import com.example.teamprojectapplication.Model.Post
+import com.example.teamprojectapplication.viewmodel.postViewModel
 
 
 class PostFragment : Fragment() {
 
     var binding: FragmentPostBinding? =null
-    val viewModel: PostsViewModel by activityViewModels()
+    val viewModel: postViewModel by activityViewModels()
 
 
     override fun onCreateView(
@@ -112,6 +113,13 @@ class PostFragment : Fragment() {
 
                 viewModel.bringText(key){ text ->
                     binding?.fragmentPostsExplainTextview?.text = text
+                }
+
+                viewModel.bringImage(key){ imageUrl ->
+                    binding?.fragmentPostsImageviewContent?.let { imageView ->
+                        Glide.with(requireContext()).load(imageUrl).into(imageView)
+                    }
+
                 }
 
                 key?.let { postKey ->

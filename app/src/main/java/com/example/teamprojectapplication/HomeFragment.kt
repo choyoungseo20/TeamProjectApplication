@@ -6,16 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.teamprojectapplication.databinding.FragmentHomeBinding
-import com.example.teamprojectapplication.viewmodel.PostsViewModel
+import com.example.teamprojectapplication.viewmodel.postViewModel
 
 class HomeFragment : Fragment() {
 
     var binding: FragmentHomeBinding? = null
-    val viewModel: PostsViewModel by activityViewModels()
+    val viewModel: postViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

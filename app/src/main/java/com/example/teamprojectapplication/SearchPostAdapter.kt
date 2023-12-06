@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.teamprojectapplication.databinding.ListSearchBinding
+import com.example.teamprojectapplication.Model.Post
 
 class SearchPostAdapter(private val posts: LiveData<MutableList<Post>>) :
     RecyclerView.Adapter<SearchPostAdapter.ViewHolder>() {

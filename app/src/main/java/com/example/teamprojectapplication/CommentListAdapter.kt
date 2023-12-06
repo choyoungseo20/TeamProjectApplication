@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.teamprojectapplication.databinding.ListCommentsBinding
-import com.google.firebase.auth.FirebaseAuth
+import com.example.teamprojectapplication.Model.Post
 
 class CommentListAdapter (private var comments: LiveData<MutableList<Post.Comment>>): RecyclerView.Adapter<CommentListAdapter.Holder>(){
 

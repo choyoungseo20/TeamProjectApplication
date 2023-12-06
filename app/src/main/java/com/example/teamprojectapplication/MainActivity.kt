@@ -1,17 +1,13 @@
 package com.example.teamprojectapplication
 
+import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
-import androidx.activity.viewModels
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
+import androidx.core.app.ActivityCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.teamprojectapplication.databinding.ActivityMainBinding
-import com.example.teamprojectapplication.viewmodel.PostsViewModel
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,6 +22,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.topNav)
         val navController = binding.frgNav.getFragment<NavHostFragment>().navController
         binding.bottomNav.setupWithNavController(navController)
+
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 0)
 
 
         binding.topNav.setOnMenuItemClickListener {

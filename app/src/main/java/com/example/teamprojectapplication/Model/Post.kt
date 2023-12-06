@@ -1,6 +1,4 @@
-package com.example.teamprojectapplication
-
-import java.security.Key
+package com.example.teamprojectapplication.Model
 
 data class Post(
     val email: String = "",

@@ -9,10 +9,10 @@ import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.teamprojectapplication.databinding.FragmentAddDdayBinding
-import com.example.teamprojectapplication.viewmodel.PostsViewModel
+import com.example.teamprojectapplication.viewmodel.postViewModel
 
 class AddDdayFragment : Fragment() {
-    val viewModel: PostsViewModel by activityViewModels()
+    val viewModel: postViewModel by activityViewModels()
     private var binding: FragmentAddDdayBinding? = null
 
     override fun onCreateView(

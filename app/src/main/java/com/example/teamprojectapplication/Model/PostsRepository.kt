@@ -1,13 +1,8 @@
-package com.example.teamprojectapplication.repository
+package com.example.teamprojectapplication.Model
 
-import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.teamprojectapplication.AddDiaryFragment
-import com.example.teamprojectapplication.MainActivity
-import com.example.teamprojectapplication.Post
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
@@ -15,7 +10,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.storage
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -139,9 +133,6 @@ class PostsRepository() {
             // postKey가 null인 경우에 대한 처리
             Log.e("PostViewModel", "Failed to generate a key for the post.")
         }
-    }
-    fun addElem(postKey: String, child: String, newValue: String) {
-        postRef.child(postKey).child(child).setValue(newValue)
     }
 
     fun bringContent(postKey: String, child: String, callback: (String?) -> Unit)  {

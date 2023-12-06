@@ -1,23 +1,19 @@
 package com.example.teamprojectapplication
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.LinearLayout
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.teamprojectapplication.databinding.FragmentSearchBinding
-import com.example.teamprojectapplication.viewmodel.PostsViewModel
+import com.example.teamprojectapplication.viewmodel.postViewModel
 
 class SearchFragment : Fragment() {
-    val viewModel : PostsViewModel by activityViewModels()
+    val viewModel : postViewModel by activityViewModels()
 
     private var binding : FragmentSearchBinding? = null
 

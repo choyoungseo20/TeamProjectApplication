@@ -5,16 +5,15 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.activityViewModels
 import com.example.teamprojectapplication.databinding.ActivityLoginBinding
-import com.example.teamprojectapplication.viewmodel.PostsViewModel
+import com.example.teamprojectapplication.viewmodel.postViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
 class LoginActivity : AppCompatActivity() {
     private var auth: FirebaseAuth? = null
     private lateinit var binding: ActivityLoginBinding
-    val viewModel: PostsViewModel by viewModels()
+    val viewModel: postViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

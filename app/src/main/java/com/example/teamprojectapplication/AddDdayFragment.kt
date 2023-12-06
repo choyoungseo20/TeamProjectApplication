@@ -27,6 +27,8 @@ class AddDdayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         binding?.edtDaydate?.setOnEditorActionListener{_,actionId,_ ->
             if(actionId == EditorInfo.IME_ACTION_DONE) {
                 binding?.txtViewdday?.text = viewModel.calDiffernce(binding?.edtDaydate?.text.toString())

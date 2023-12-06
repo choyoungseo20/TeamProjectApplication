@@ -10,10 +10,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.storage
 import java.text.SimpleDateFormat
 import java.util.Date
-
 
 class PostsRepository() {
     val database get() = Firebase.database
@@ -21,36 +21,8 @@ class PostsRepository() {
     val postRef get() = database.getReference("post")
     val searchRef get() = database.getReference("search")
     val fbAuth get() = Firebase.auth
-
-
-
-    val storage get() = Firebase.storage
+    val storage get() = FirebaseStorage.getInstance()
     val storageRef get() = storage.getReference("image")
-    val fileName get() = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
-    val mountainsRef get() = storageRef.child("${fileName}.png")
-    /*
-    fun imageUpload(uri: Uri) {
-        val uploadTask = mountainsRef.putFile(uri)
-        uploadTask.addOnSuccessListener { taskSnapshot ->
-            //Toast.makeText(AddDiaryFragment(), "사진 업로드 성공", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener {
-            //Toast.makeText(MainActivity(), "사진 업로드 실패", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-
-    private fun imageDownload() {
-        val downloadTask = mountainsRef.downloadUrl
-        downloadTask.addOnSuccessListener { uri ->
-
-        }.addOnFailureListener {
-
-        }
-    }
-
-     */
-
-
 
     fun observePost(post: MutableLiveData<MutableList<Post>>) {
         postRef.addValueEventListener(object: ValueEventListener { //콜백함수
@@ -71,7 +43,6 @@ class PostsRepository() {
                     }
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
@@ -85,6 +56,20 @@ class PostsRepository() {
             userRef.child(uid).setValue(fbAuth?.currentUser?.email)
         }
     }
+
+    fun setPost(post: Post?){
+        val postKey = postRef.push().key
+        postKey?.let { nonNullableIndex ->
+            val updatedPost = post?.copy(key = nonNullableIndex)
+            postRef.child(nonNullableIndex).setValue(updatedPost)
+            postRef.child(nonNullableIndex).child("email").setValue(fbAuth?.currentUser?.email)
+        } ?: run {
+            // postKey가 null인 경우에 대한 처리
+            Log.e("PostViewModel", "Failed to generate a key for the post.")
+        }
+    }
+
+    // 여기까지 정리 완료
 
     fun addComment(postKey: String, comment: Post.Comment) {
         val commentsRef = postRef.child(postKey).child("comments")
@@ -123,17 +108,7 @@ class PostsRepository() {
         })
     }
 
-    fun setPost(post: Post?){
-        val postKey = postRef.push().key
-        postKey?.let { nonNullableIndex ->
-            val updatedPost = post?.copy(key = nonNullableIndex)
-            postRef.child(nonNullableIndex).setValue(updatedPost)
-            postRef.child(nonNullableIndex).child("email").setValue(fbAuth?.currentUser?.email)
-        } ?: run {
-            // postKey가 null인 경우에 대한 처리
-            Log.e("PostViewModel", "Failed to generate a key for the post.")
-        }
-    }
+
 
     fun bringContent(postKey: String, child: String, callback: (String?) -> Unit)  {
         val postRef2 = FirebaseDatabase.getInstance().reference.child("post").child(postKey)

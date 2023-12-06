@@ -15,7 +15,7 @@ import com.example.teamprojectapplication.viewmodel.postViewModel
 
 class CommunityFragment : Fragment() {
 
-    var binding: FragmentCommunityBinding? = null
+    private var binding: FragmentCommunityBinding? = null
     val viewModel: postViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -51,16 +51,10 @@ class CommunityFragment : Fragment() {
         binding?.recPosts?.adapter = adapter
         binding?.recPosts?.layoutManager = LinearLayoutManager(context)
         binding?.recPosts?.setHasFixedSize(true)
-
-
-
-
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
     }
-
-
 }

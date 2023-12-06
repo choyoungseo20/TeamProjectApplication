@@ -91,7 +91,7 @@ class PostFragment : Fragment() {
             viewModel.posts.observe(viewLifecycleOwner) { posts ->
                 val post = posts.find { it.key == key }
                 val likeCount = post?.likeCount ?: 0
-                binding?.fragmentPostsLikeCounterTextview?.text = "좋아요" + likeCount.toString() +"개"
+                binding?.fragmentPostsLikeCounterTextview?.text = "좋아요 ${likeCount}개"
 
                 if (post?.email == userId) {
                     binding?.btnDeletePost?.visibility = View.VISIBLE

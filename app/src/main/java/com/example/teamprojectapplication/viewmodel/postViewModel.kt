@@ -1,5 +1,6 @@
 package com.example.teamprojectapplication.viewmodel
 
+import android.net.Uri
 import android.util.Log
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -11,16 +12,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.example.teamprojectapplication.Model.Post
 import com.example.teamprojectapplication.Model.PostsRepository
-import com.google.firebase.auth.FirebaseAuth
+import java.text.SimpleDateFormat
 import java.time.format.DateTimeParseException
+import java.util.Date
 import kotlin.math.abs
 
 class postViewModel : ViewModel() {
     private val repository = PostsRepository()
     private val _posts = MutableLiveData<MutableList<Post>>()
     val posts : LiveData<MutableList<Post>> get() = _posts
+
     private val _post = MutableLiveData(Post())
     val post: LiveData<Post> get() = _post
+
 
     private val _comments = MutableLiveData<MutableList<Post.Comment>>()
     val comments : LiveData<MutableList<Post.Comment>> get() = _comments
@@ -44,7 +48,7 @@ class postViewModel : ViewModel() {
 
     //현재 접속자의 id와 일치하는 포스트만 필터링하여 뜨우는 함수
     val myPosts:LiveData<MutableList<Post>> = _posts.map { postList ->
-        postList.filter { it.email == FirebaseAuth.getInstance().currentUser?.email }
+        postList.filter { it.email == repository.fbAuth.currentUser?.email }
             .toMutableList().apply {
             reverse()
             for (post in this) {
@@ -77,33 +81,7 @@ class postViewModel : ViewModel() {
         // 두 LiveData의 변경을 observe하고, filter를 수행하여 searchPosts를 업데이트 함.
     }
 
-    fun observeSearchWord():LiveData<String>{
-        repository.observeSearchWord(_searchWord)
-        return searchWord
-    }
-    fun deletePost(postKey: String) {
-        repository.deletePost(postKey)
-    }
 
-    fun deleteComment(postKey: String, comment: Post.Comment) {
-        repository.deleteComment(postKey, comment)
-        val currentCommentCount = _comments.value?.size ?: 0
-        val newCommentCount = currentCommentCount - 1
-        repository.updateCommentCount(postKey, newCommentCount)
-    }
-
-    fun bringKey(postKey: String) {
-        Log.d("func","bringkey called")
-        key = postKey
-    }
-
-    fun retriveKey(): String? {
-        return key
-    }
-
-    fun bringCommentKey(commentKey: String) {
-        cKey = commentKey
-    }
 
     fun setUser() {
         repository.setUser()
@@ -124,21 +102,6 @@ class postViewModel : ViewModel() {
             date = date
         )
     }
-    fun calDiffernce(date: String) : String {
-        return try{
-            val selectedDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE)
-            val today = LocalDate.now()
-            val difference = today.until(selectedDate, ChronoUnit.DAYS).toInt()
-            when{
-                selectedDate.isBefore(today) -> "D+${abs(difference)}"
-                selectedDate.isAfter(today) -> "D-$difference"
-                else -> "D-day" }
-        }catch (e: DateTimeParseException){
-            "Error"
-        }
-
-    }
-
     fun setImageUrl(url: String) {
         _post.value = _post.value?.copy(
             imageUrl = url
@@ -157,6 +120,8 @@ class postViewModel : ViewModel() {
         )
     }
     fun setPost() = repository.setPost(post.value)
+
+    // 여기까지 정리 완료
 
     fun addComment(postKey: String, comment: Post.Comment) {
         repository.addComment(postKey, comment)
@@ -203,41 +168,67 @@ class postViewModel : ViewModel() {
         return repository.fbAuth?.currentUser?.uid
     }
 
-    /*
-    fun imageUpload(uri: Uri) {
-        repository.imageUpload(uri)
+    fun observeSearchWord():LiveData<String>{
+        repository.observeSearchWord(_searchWord)
+        return searchWord
+    }
+    fun deletePost(postKey: String) {
+        repository.deletePost(postKey)
     }
 
-     */
+    fun deleteComment(postKey: String, comment: Post.Comment) {
+        repository.deleteComment(postKey, comment)
+        val currentCommentCount = _comments.value?.size ?: 0
+        val newCommentCount = currentCommentCount - 1
+        repository.updateCommentCount(postKey, newCommentCount)
+    }
 
-    /*
-    private val registerForActivityResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            handleImageSelection(result)
+    fun bringKey(postKey: String) {
+        Log.d("func","bringkey called")
+        key = postKey
+    }
+
+    fun retriveKey(): String? {
+        return key
+    }
+
+    fun bringCommentKey(commentKey: String) {
+        cKey = commentKey
+    }
+    fun calDiffernce(date: String) : String {
+        return try{
+            val selectedDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE)
+            val today = LocalDate.now()
+            val difference = today.until(selectedDate, ChronoUnit.DAYS).toInt()
+            when{
+                selectedDate.isBefore(today) -> "D+${abs(difference)}"
+                selectedDate.isAfter(today) -> "D-$difference"
+                else -> "D-day" }
+        }catch (e: DateTimeParseException){
+            "Error"
         }
-
-    fun launchImagePicker() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-        registerForActivityResult.launch(intent)
     }
 
-    private fun handleImageSelection(result: ActivityResult) {
-        // 이미지 선택 결과 처리 로직을 여기에 추가
-        when (result.resultCode) {
-            Activity.RESULT_OK -> {
-                val uri: Uri? = result.data?.data
-                uri?.let {
-                    // 이미지 선택 결과를 처리하는 로직을 추가
-                }
+
+
+
+    private val _imageUrl = MutableLiveData<String>()
+    val imageUrl: LiveData<String> get() = _imageUrl
+
+    fun imageUpload(uri: Uri?) {
+        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageFileName = "IMAGE ${timestamp}.png"
+
+        val storagePath = repository.storageRef.child(imageFileName)
+
+        uri?.let {
+            storagePath.putFile(it).continueWithTask {
+                return@continueWithTask storagePath.downloadUrl
+            }.addOnCompleteListener { downloadUrl ->
+                _imageUrl.value = downloadUrl.result.toString()
+                setImageUrl(downloadUrl.result.toString())
             }
         }
     }
-
-    fun onImageAreaClicked() {
-        launchImagePicker()
-    }
-
-     */
-
 
 }

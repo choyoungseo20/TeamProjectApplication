@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.teamprojectapplication.databinding.FragmentPostBinding
 import com.example.teamprojectapplication.viewmodel.PostsViewModel
@@ -44,7 +45,7 @@ class PostFragment : Fragment() {
 
         fun showDeletePostConfirmationDialog() {
             val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("삭제 확인")
+            builder.setTitle("게시물 삭제 확인")
                 .setMessage("게시물을 삭제하시겠습니까?")
                 .setPositiveButton("예") { _, _ ->
                     // '예' 버튼이 클릭되면 게시물 삭제 함수 호출
@@ -85,8 +86,6 @@ class PostFragment : Fragment() {
         })
 
 
-
-
         if (key != null) {
             viewModel.posts.observe(viewLifecycleOwner) { posts ->
                 val post = posts.find { it.key == key }
@@ -100,7 +99,7 @@ class PostFragment : Fragment() {
                     }
                     binding?.btnModifyPost?.visibility = View.VISIBLE
                     binding?.btnModifyPost?.setOnClickListener {
-                        showDeletePostConfirmationDialog()
+                        findNavController().navigate(R.id.action_postFragment_to_addDdayFragment)
                     }
                 } else {
                     binding?.btnDeletePost?.visibility = View.GONE
@@ -145,8 +144,6 @@ class PostFragment : Fragment() {
                 }
             }
         }
-
-
     }
 
     override fun onDestroyView() {

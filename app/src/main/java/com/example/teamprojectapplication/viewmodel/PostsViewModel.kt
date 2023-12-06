@@ -34,9 +34,11 @@ class PostsViewModel : ViewModel() {
 
     private val _searchWord = MutableLiveData<String>()
     val searchWord : LiveData<String> get() = _searchWord
-    private val _likeStatusMap = mutableMapOf<String, MutableLiveData<Boolean>>()
+
+
+
     lateinit var key: String
-    lateinit var cKey: String
+    lateinit var cKey: String //댓글 키
 
     init {
         repository.observePost(_posts)

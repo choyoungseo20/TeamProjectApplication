@@ -40,9 +40,9 @@ class AddDdayFragment : Fragment() {
         }
 
         binding?.btnNext?.setOnClickListener{
-            viewModel.setTitle(binding?.edtDaytitle?.text.toString())
-            viewModel.setDate(binding?.edtDaydate?.text.toString())
-            viewModel.setPrivate(binding?.chkPrivate?.isChecked ?: false)
+            viewModel.setDdayData(binding?.edtDaytitle?.text.toString(),
+                                  binding?.edtDaydate?.text.toString(),
+                                  binding?.chkPrivate?.isChecked ?: false)
             findNavController().navigate(R.id.action_addDdayFragment_to_addDiaryFragment)
         }
     }

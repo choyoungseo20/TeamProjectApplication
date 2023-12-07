@@ -12,20 +12,18 @@ import androidx.navigation.fragment.findNavController
 import com.example.teamprojectapplication.databinding.FragmentAddDiaryBinding
 import com.example.teamprojectapplication.viewmodel.postViewModel
 import android.content.Intent
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.Observer
 
 class AddDiaryFragment : Fragment() {
     private var binding : FragmentAddDiaryBinding? = null
     val viewModel: postViewModel by activityViewModels()
 
     var photoUri : Uri? = null
-    val photoResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){//photoResult.launch(intent) 비동기 -> 콜백함수
+    private val photoResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){//photoResult.launch(intent) 비동기 -> 콜백함수
         if( it.resultCode == RESULT_OK ) {
             photoUri = it.data?.data
             binding?.imgArea?.setImageURI(photoUri)
-            viewModel.imageUpload(photoUri)
         }
     }
 
@@ -56,7 +54,8 @@ class AddDiaryFragment : Fragment() {
         }
 
         binding?.btnSave?.setOnClickListener {
-            viewModel.setText(binding?.edtContents?.text.toString())
+            viewModel.imageUpload(photoUri)
+            viewModel.setDiary(binding?.edtContents?.text.toString())
             viewModel.setPost()
             findNavController().navigate(R.id.action_addDiaryFragment_to_homeFragment)
         }

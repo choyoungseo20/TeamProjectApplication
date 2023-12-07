@@ -10,8 +10,10 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.example.teamprojectapplication.Model.Post
 import com.example.teamprojectapplication.Model.PostsRepository
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeParseException
 import java.util.Date
@@ -87,30 +89,28 @@ class postViewModel : ViewModel() {
         repository.setUser()
     }
 
-    fun setTitle(title: String) {
+    fun setDdayData(title: String, date: String, private: Boolean) {
         _post.value = _post.value?.copy(
-            title = title
+            title = title,
+            date = date,
+            private = private
         )
     }
-    fun setText(text: String) {
+    fun setDiary(text: String) {
         _post.value = _post.value?.copy(
             text = text
         )
     }
-    fun setDate(date: String) {
-        _post.value = _post.value?.copy(
-            date = date
-        )
-    }
-    fun setImageUrl(url: String) {
-        _post.value = _post.value?.copy(
-            imageUrl = url
-        )
-    }
-    fun setPrivate(private: Boolean) {
-        _post.value = _post.value?.copy(
-            private = private
-        )
+    fun imageUpload(uri: Uri?) {
+        viewModelScope.launch {
+            uri?.let {
+                repository.upLoadImage(it) {url ->
+                    _post.value = _post.value?.copy(
+                        imageUrl = url
+                    )
+                }
+            }
+        }
     }
 
     fun setPost() = repository.setPost(post.value)
@@ -167,9 +167,6 @@ class postViewModel : ViewModel() {
     fun getCurrUserUid(): String? {
         return repository.fbAuth?.currentUser?.uid
     }
-    //여기까지
-
-
 
     fun bringKey(postKey: String) {
         Log.d("func","bringkey called")
@@ -183,14 +180,7 @@ class postViewModel : ViewModel() {
     fun bringCommentKey(commentKey: String) {
         cKey = commentKey
     }
-
-    fun imageUpload(uri: Uri?) {
-        uri?.let {
-            repository.upLoadImage(it){url ->
-                setImageUrl(url)
-            }
-        }
-    }
+    //여기까지
 
     //박승진
     fun calDiffernce(date: String) : String {

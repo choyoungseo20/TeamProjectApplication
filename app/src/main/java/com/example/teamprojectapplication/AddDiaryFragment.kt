@@ -38,10 +38,6 @@ class AddDiaryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.posts.observe(viewLifecycleOwner) {
-
-        }
-
         binding?.imgArea?.setOnClickListener {//apply
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
@@ -54,9 +50,7 @@ class AddDiaryFragment : Fragment() {
         }
 
         binding?.btnSave?.setOnClickListener {
-            viewModel.imageUpload(photoUri)
-            viewModel.setDiary(binding?.edtContents?.text.toString())
-            viewModel.setPost()
+            viewModel.setDiary(photoUri, binding?.edtContents?.text.toString())
             findNavController().navigate(R.id.action_addDiaryFragment_to_homeFragment)
         }
     }

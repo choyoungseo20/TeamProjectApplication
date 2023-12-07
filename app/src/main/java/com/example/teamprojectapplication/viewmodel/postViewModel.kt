@@ -97,24 +97,22 @@ class postViewModel : ViewModel() {
             private = private
         )
     }
-    fun setDiary(text: String) {
-        _post.value = _post.value?.copy(
-            text = text
-        )
-    }
-    fun imageUpload(uri: Uri?) {
-        viewModelScope.launch {
-            uri?.let {
-                repository.upLoadImage(it) {url ->
-                    _post.value = _post.value?.copy(
-                        imageUrl = url
-                    )
-                }
+    fun setDiary(uri: Uri?, text: String) {
+        uri?.let {
+            repository.upLoadImage(it) {url ->
+                _post.value = _post.value?.copy(
+                    imageUrl = url,
+                    text = text
+                )
+
+                repository.setPost(post.value)
             }
         }
     }
 
-    fun setPost() = repository.setPost(post.value)
+    fun setPost() {
+        repository.setPost(post.value)
+    }
 
     // ksh
     fun addComment(postKey: String, comment: Post.Comment) {

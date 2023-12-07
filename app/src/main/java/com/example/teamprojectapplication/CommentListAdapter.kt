@@ -12,7 +12,6 @@ class CommentListAdapter (private var comments: LiveData<MutableList<Post.Commen
 
     interface OnItemClickListener{
         fun onItemClick(view: View, position: Int, commentKey: String, userId: String)
-
     }
     private lateinit var itemClickListener: OnItemClickListener
 

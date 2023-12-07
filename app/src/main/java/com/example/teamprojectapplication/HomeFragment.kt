@@ -29,10 +29,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // RecyclerView 초기화
-        //현재 Fragment의 컨텍스트로 LinearLayoutManager 초기화
+
         binding?.recDdays?.layoutManager = LinearLayoutManager(context)
-        // 어댑터를 초기화
 
         viewModel.myPosts.observe(viewLifecycleOwner) {
             binding?.recDdays?.adapter?.notifyDataSetChanged()

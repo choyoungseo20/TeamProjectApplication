@@ -26,7 +26,6 @@ class PostFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentPostBinding.inflate(inflater, container, false)
 
         return binding?.root
@@ -37,9 +36,9 @@ class PostFragment : Fragment() {
 
         val key = viewModel.retriveKey()
 
+        val commentAdapter = CommentListAdapter(viewModel.comments)
         binding?.recComments?.layoutManager = LinearLayoutManager(context)
 
-        val commentAdapter = CommentListAdapter(viewModel.comments)
 
         val userId = viewModel.getCurrUserEmail()
         val userUid = viewModel.getCurrUserUid()
@@ -49,7 +48,6 @@ class PostFragment : Fragment() {
             builder.setTitle("게시물 삭제 확인")
                 .setMessage("게시물을 삭제하시겠습니까?")
                 .setPositiveButton("예") { _, _ ->
-                    // '예' 버튼이 클릭되면 게시물 삭제 함수 호출
                     viewModel.deletePost(key!!)
                 }
                 .setNegativeButton("아니요", null)
@@ -61,12 +59,12 @@ class PostFragment : Fragment() {
             builder.setTitle("댓글 삭제 확인")
                 .setMessage("댓글을 삭제하시겠습니까?")
                 .setPositiveButton("예") { _, _ ->
-                    // '예' 버튼이 클릭되면 댓글 삭제 함수 호출
                     viewModel.deleteComment(key!!, comment)
                 }
                 .setNegativeButton("아니요", null)
                 .show()
         }
+
         commentAdapter.setOnItemClickListener(object : CommentListAdapter.OnItemClickListener{
             override fun onItemClick(view: View, position: Int, commentKey: String, commentEmail: String) {
                 viewModel.bringCommentKey(commentKey)
@@ -79,11 +77,11 @@ class PostFragment : Fragment() {
                     }
                 }
                 else {
-                    // 현재 사용자와 댓글 작성자가 다를 경우 삭제 권한이 없음을 사용자에게 알릴 수 있습니다.
                     Toast.makeText(requireContext(), "삭제 권한이 없습니다.", Toast.LENGTH_SHORT).show()
                 }
 
             }
+
         })
 
 
@@ -98,13 +96,8 @@ class PostFragment : Fragment() {
                     binding?.btnDeletePost?.setOnClickListener {
                         showDeletePostConfirmationDialog()
                     }
-                    binding?.btnModifyPost?.visibility = View.VISIBLE
-                    binding?.btnModifyPost?.setOnClickListener {
-                        findNavController().navigate(R.id.action_postFragment_to_addDdayFragment)
-                    }
                 } else {
                     binding?.btnDeletePost?.visibility = View.GONE
-                    binding?.btnModifyPost?.visibility = View.GONE
                 }
 
                 viewModel.bringEmail(key){ email ->

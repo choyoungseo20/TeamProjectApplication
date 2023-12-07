@@ -70,8 +70,7 @@ class PostsRepository() {
         }
     }
 
-    // 여기까지 정리 완료
-
+    // 김상현
     fun addComment(postKey: String, comment: Post.Comment) {
         val commentsRef = postRef.child(postKey).child("comments")
         val commentKey = commentsRef.push().key
@@ -104,11 +103,10 @@ class PostsRepository() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // 오류 처리
+
             }
         })
     }
-
 
 
     fun bringContent(postKey: String, child: String, callback: (String?) -> Unit)  {
@@ -161,7 +159,7 @@ class PostsRepository() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // 오류 처리
+
             }
         })
     }
@@ -186,12 +184,13 @@ class PostsRepository() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // 오류 처리
+
             }
         })
 
         return resultLiveData
     }
+    //여기까지
 
     fun searchWord(word : String){
         val userId = fbAuth?.currentUser?.uid

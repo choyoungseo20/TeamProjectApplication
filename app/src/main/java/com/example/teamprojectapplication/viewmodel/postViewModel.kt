@@ -46,7 +46,7 @@ class postViewModel : ViewModel() {
         }
     }
 
-    //현재 접속자의 id와 일치하는 포스트만 필터링하여 뜨우는 함수
+    //현재 접속자의 id와 일치하는 포스트만 필터링하여 뜨우는 함수 (ksh)
     val myPosts:LiveData<MutableList<Post>> = _posts.map { postList ->
         postList.filter { it.email == repository.fbAuth.currentUser?.email }
             .toMutableList().apply {
@@ -121,7 +121,7 @@ class postViewModel : ViewModel() {
     }
     fun setPost() = repository.setPost(post.value)
 
-    // 여기까지 정리 완료
+    // ksh
 
     fun addComment(postKey: String, comment: Post.Comment) {
         repository.addComment(postKey, comment)
@@ -131,9 +131,29 @@ class postViewModel : ViewModel() {
         repository.updateCommentCount(postKey, newCommentCount)
     }
 
+    fun deleteComment(postKey: String, comment: Post.Comment) {
+        repository.deleteComment(postKey, comment)
+        val currentCommentCount = _comments.value?.size ?: 0
+        val newCommentCount = currentCommentCount - 1
+        repository.updateCommentCount(postKey, newCommentCount)
+    }
+
     fun observeComments(postKey: String) {
         repository.observeComments(postKey, _comments)
     }
+
+    fun likePost(postKey: String) {
+        val userId = repository.fbAuth?.currentUser?.uid
+        repository.likePost(postKey, userId!!)
+    }
+    fun observeLikeStatus(postKey: String, userId: String): LiveData<Boolean> {
+        return repository.observeLikeStatus(postKey, userId)
+    }
+
+    fun deletePost(postKey: String) {
+        repository.deletePost(postKey)
+    }
+
 
     fun bringEmail(key: String, callback: (String?)-> Unit) {
         repository.bringContent(key, "email", callback)
@@ -147,19 +167,6 @@ class postViewModel : ViewModel() {
         repository.bringContent(key, "imageUrl", callback)
     }
 
-    fun searchWord(word : String) {
-        repository.searchWord(word)
-    }
-
-
-    fun likePost(postKey: String) {
-        val userId = repository.fbAuth?.currentUser?.uid
-        repository.likePost(postKey, userId!!)
-    }
-    fun observeLikeStatus(postKey: String, userId: String): LiveData<Boolean> {
-        return repository.observeLikeStatus(postKey, userId)
-    }
-
     fun getCurrUserEmail(): String? {
         return repository.fbAuth?.currentUser?.email
     }
@@ -167,20 +174,16 @@ class postViewModel : ViewModel() {
     fun getCurrUserUid(): String? {
         return repository.fbAuth?.currentUser?.uid
     }
+    //여기까지
+
+    fun searchWord(word : String) {
+        repository.searchWord(word)
+    }
+
 
     fun observeSearchWord():LiveData<String>{
         repository.observeSearchWord(_searchWord)
         return searchWord
-    }
-    fun deletePost(postKey: String) {
-        repository.deletePost(postKey)
-    }
-
-    fun deleteComment(postKey: String, comment: Post.Comment) {
-        repository.deleteComment(postKey, comment)
-        val currentCommentCount = _comments.value?.size ?: 0
-        val newCommentCount = currentCommentCount - 1
-        repository.updateCommentCount(postKey, newCommentCount)
     }
 
     fun bringKey(postKey: String) {

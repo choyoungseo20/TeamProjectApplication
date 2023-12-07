@@ -192,6 +192,7 @@ class PostsRepository() {
     }
     //여기까지
 
+    //박승진
     fun searchWord(word : String){
         val userId = fbAuth?.currentUser?.uid
         userId?.let {
@@ -213,6 +214,7 @@ class PostsRepository() {
             })
         }
     }
+    //여기까지
 
     fun upLoadImage(uri: Uri, loadImageUrl: (String) -> Unit){
         val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())

@@ -59,7 +59,7 @@ class postViewModel : ViewModel() {
         }
     }
 
-    //공개 포스트 중 작성자를 기준으로 게시글 검색
+    //공개 포스트 중 작성자를 기준으로 게시글 검색 (박승진)
     val searchPosts: LiveData<MutableList<Post>> = MediatorLiveData<MutableList<Post>>().apply {
         // 관찰 하려는 LiveData (nonPrivatePosts , searchWord)
         addSource(nonPrivatePosts) { nonPrivatePosts ->
@@ -113,16 +113,9 @@ class postViewModel : ViewModel() {
         )
     }
 
-    fun setColor(color: Int){
-        //val colorData = rgbTohex(color)
-        _post.value = _post.value?.copy(
-            color = color
-        )
-    }
     fun setPost() = repository.setPost(post.value)
 
     // ksh
-
     fun addComment(postKey: String, comment: Post.Comment) {
         repository.addComment(postKey, comment)
         //댓글 추가될 때마다 댓글 개수 업데이트
@@ -176,15 +169,7 @@ class postViewModel : ViewModel() {
     }
     //여기까지
 
-    fun searchWord(word : String) {
-        repository.searchWord(word)
-    }
 
-
-    fun observeSearchWord():LiveData<String>{
-        repository.observeSearchWord(_searchWord)
-        return searchWord
-    }
 
     fun bringKey(postKey: String) {
         Log.d("func","bringkey called")
@@ -198,6 +183,16 @@ class postViewModel : ViewModel() {
     fun bringCommentKey(commentKey: String) {
         cKey = commentKey
     }
+
+    fun imageUpload(uri: Uri?) {
+        uri?.let {
+            repository.upLoadImage(it){url ->
+                setImageUrl(url)
+            }
+        }
+    }
+
+    //박승진
     fun calDiffernce(date: String) : String {
         return try{
             val selectedDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE)
@@ -212,13 +207,21 @@ class postViewModel : ViewModel() {
         }
     }
 
-
-    fun imageUpload(uri: Uri?) {
-        uri?.let {
-            repository.upLoadImage(it){url ->
-                setImageUrl(url)
-            }
-        }
+    fun setColor(color: Int){
+        //val colorData = rgbTohex(color)
+        _post.value = _post.value?.copy(
+            color = color
+        )
     }
 
+    fun searchWord(word : String) {
+        repository.searchWord(word)
+    }
+
+
+    fun observeSearchWord():LiveData<String>{
+        repository.observeSearchWord(_searchWord)
+        return searchWord
+    }
+    //여기까지
 }

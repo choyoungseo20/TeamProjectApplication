@@ -210,23 +210,10 @@ class postViewModel : ViewModel() {
     }
 
 
-
-
-    private val _imageUrl = MutableLiveData<String>()
-    val imageUrl: LiveData<String> get() = _imageUrl
-
     fun imageUpload(uri: Uri?) {
-        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val imageFileName = "IMAGE ${timestamp}.png"
-
-        val storagePath = repository.storageRef.child(imageFileName)
-
         uri?.let {
-            storagePath.putFile(it).continueWithTask {
-                return@continueWithTask storagePath.downloadUrl
-            }.addOnCompleteListener { downloadUrl ->
-                _imageUrl.value = downloadUrl.result.toString()
-                setImageUrl(downloadUrl.result.toString())
+            repository.upLoadImage(it){url ->
+                setImageUrl(url)
             }
         }
     }

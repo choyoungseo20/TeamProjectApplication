@@ -44,12 +44,6 @@ class AddDiaryFragment : Fragment() {
 
         }
 
-        viewModel.imageUrl.observe(viewLifecycleOwner, Observer { imageUrl ->
-            imageUrl?.let {
-                Toast.makeText(requireActivity(), "업로드 성공: $imageUrl", Toast.LENGTH_LONG).show()
-            }
-        })
-
         binding?.imgArea?.setOnClickListener {//apply
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"

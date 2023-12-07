@@ -1,5 +1,6 @@
 package com.example.teamprojectapplication.Model
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -211,6 +212,18 @@ class PostsRepository() {
                 }
 
             })
+        }
+    }
+
+    fun upLoadImage(uri: Uri, loadImageUrl: (String) -> Unit){
+        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageFileName = "IMAGE ${timestamp}.png"
+        val storagePath = storageRef.child(imageFileName)
+
+        storagePath.putFile(uri).continueWithTask {
+            return@continueWithTask storagePath.downloadUrl
+        }.addOnCompleteListener { downloadUrl ->
+            loadImageUrl(downloadUrl.result.toString())
         }
     }
 

@@ -64,6 +64,7 @@ class postViewModel : ViewModel() {
     //공개 포스트 중 작성자를 기준으로 게시글 검색 (박승진)
     val searchPosts: LiveData<MutableList<Post>> = MediatorLiveData<MutableList<Post>>().apply {
         // 관찰 하려는 LiveData (nonPrivatePosts , searchWord)
+        // 첫 번째 addSource -> _searchWord가 존재할 경우 filter
         addSource(nonPrivatePosts) { nonPrivatePosts ->
             _searchWord.value?.let {
                 value = nonPrivatePosts.filter { it.email == _searchWord.value }.toMutableList().apply {
@@ -71,7 +72,7 @@ class postViewModel : ViewModel() {
                 }
             }
         }
-
+        //두 번째 addSource -> searchWord 값이 변경될 때마다 filter
         addSource(searchWord) { searchTerm ->
             val nonPrivatePostsValue = nonPrivatePosts.value
             nonPrivatePostsValue?.let {
